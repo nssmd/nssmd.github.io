@@ -1,9 +1,9 @@
 # RoboTwin 实验编号、实时状态与排期
 
-**更新时间：** 2026-08-27 01:06 PDT  
+**更新时间：** 2026-08-27 01:58 PDT  
 **实验范围：** 仅 RoboTwin  
 **当前实验：** E1 · Offline RL vs Offline RFT  
-**当前步骤：** E1-S1 · 数据冻结与视频评分
+**当前步骤：** E1-S2 · Offline RL / RFT Pilot准备
 
 ## 1. 实验编号
 
@@ -19,16 +19,21 @@
 
 ## 2. 当前正在做什么
 
-### E1-S1 · 数据冻结与视频评分
+### E1-S1 · 直接预测视频 Reward Smoke
 
 | 子步骤 | 工作量 | 完成 | 状态 | ETA |
 |---|---:|---:|---|---|
-| E1-S1a | 32条视频评分吞吐smoke | 0 / 32 | 准备中 | 完成后得到真实评分吞吐 |
-| E1-S1b | 416条历史视频评分记录 | 0 / 416 | 已排队 | `T416 = 13 × T32 ÷ 实际并发` |
+| E1-S1a | 32条视频评分吞吐smoke | 32 / 32 | 完成 | Reward-Top 75.0%，Random 59.4% |
+| E1-S1b | 416条历史视频评分记录 | 416 / 416 | 完成 | 成败分叉组 +13.2pp |
 | E1-S2 | Offline RL / RFT Pilot训练 | 36个task-seed-method jobs | 0 / 36 | 评分完成后约4-6小时 |
 | E1-S3 | Pilot fresh evaluation | 540个episode | 0 / 540 | 按当前8 workers约4小时 |
 
-当前没有新的 RoboTwin RL 训练进程。E1-S1 完成后进入 E1-S2。
+E1-S1已经完成。当前开始准备E1-S2的Offline RL / RFT Pilot训练清单。
+
+**Reward状态说明：** 历史 RoboTwin RL 使用的是机器人执行后的 simulator
+stage reward；它读取真实执行的分阶段进度与最终成功，不是直接看预测视频。
+E1-S1 正在单独验证新的 direct-video scorer，只看执行前第一段 WAM 预测视频。
+它通过 reward-top 对比 random 后，才决定是否用于 E1-S2 的 RL / RFT。
 
 ## 3. 已经完成了什么
 

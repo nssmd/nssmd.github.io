@@ -1,27 +1,27 @@
 {
-  "updatedAt": "2026-08-27 01:06 PDT",
-  "current": "E1 · Offline RL vs Offline RFT",
+  "updatedAt": "2026-08-27 01:58 PDT",
+  "current": "E1-S2 · Offline RL / RFT Pilot准备",
   "currentExperiment": "E1 · Offline RL vs Offline RFT",
-  "currentStep": "Step 1/5 · 先跑32条评分吞吐smoke，再补齐416条评分记录",
-  "computeBasis": "PAI-4041：8×L20X（143.8GB），当前8卡空闲；ETA按8 workers、185s/episode和15%调度开销计算。PAI-4042不计入。",
+  "currentStep": "Step 2/5 · 冻结Pilot训练清单并启动Offline RL与RFT",
+  "computeBasis": "E1-S1已完成416条评分。PAI-4041：8×L20X（143.8GB）；Pilot按8卡并行安排。",
   "items": [
     {
       "code": "E1-S1a",
       "name": "视频评分吞吐Smoke",
-      "detail": "先测32条视频的真实评分耗时，用于计算全量ETA",
-      "done": 0,
+      "detail": "Reward-Top 6/8；Random期望59.4%",
+      "done": 32,
       "total": 32,
-      "status": "preparing",
-      "eta": "完成32条后更新"
+      "status": "done",
+      "eta": "完成"
     },
     {
       "code": "E1-S1b",
       "name": "全量视频评分记录",
-      "detail": "20个任务、416条预测视频",
-      "done": 0,
+      "detail": "19个成败分叉组：Top 68.4%，Random 55.3%",
+      "done": 416,
       "total": 416,
-      "status": "queued",
-      "eta": "T416 = 13 × T32 ÷ 实际并发"
+      "status": "done",
+      "eta": "完成"
     },
     {
       "code": "E1-S2",

@@ -1,5 +1,10 @@
 # Online-WAM：给世界动作模型加入在线训练
 
+> **Reward correction, 2026-08-27:** The historical "complex reward" in this
+> document is a simulator stage reward computed after frozen-IDM execution. It
+> is not a direct predicted-video reward. The direct-video scorer is still an
+> E1-S1 smoke and has not entered RL or RFT training.
+
 > **核心主张：** 预训练好的 World Action Model 不应该在部署后保持静止。它应该利用真实交互中的成功和失败，持续改进自己生成的未来视频与机器人行为。Online-WAM 把 WAM 内部的视频生成轨迹变成可优化的随机策略，用最终任务成功率直接进行在线强化学习。
 
 ## 摘要
