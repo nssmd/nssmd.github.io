@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-08-27 01:58 PDT",
-  "current": "E1-S2 · Offline RL / RFT Pilot准备",
+  "updatedAt": "2026-08-27 08:52 PDT",
+  "current": "E1-S2a · Pilot数据采集运行中",
   "currentExperiment": "E1 · Offline RL vs Offline RFT",
-  "currentStep": "Step 2/5 · 冻结Pilot训练清单并启动Offline RL与RFT",
-  "computeBasis": "E1-S1已完成416条评分。PAI-4041：8×L20X（143.8GB）；Pilot按8卡并行安排。",
+  "currentStep": "Step 2/5 · 6任务×3 seeds的新训练数据，共288条rollout",
+  "computeBasis": "PAI-4041：12个worker共享8×L20X；GPU已进入计算，无OOM或端口错误。",
   "items": [
     {
       "code": "E1-S1a",
@@ -24,13 +24,22 @@
       "eta": "完成"
     },
     {
-      "code": "E1-S2",
+      "code": "E1-S2a",
+      "name": "Pilot训练数据采集",
+      "detail": "6 tasks × 12 states × 4 paths；10 success / 4 failure / 0 infra",
+      "done": 14,
+      "total": 288,
+      "status": "running",
+      "eta": "按12 workers约1.5-2h"
+    },
+    {
+      "code": "E1-S2b",
       "name": "Offline RL / RFT Pilot训练",
-      "detail": "6 tasks × 3 seeds × 2 methods",
+      "detail": "3个独立seed × 6 tasks × 2 methods",
       "done": 0,
       "total": 36,
       "status": "queued",
-      "eta": "评分完成后约4-6h"
+      "eta": "数据完成后启动"
     },
     {
       "code": "E1-S3",
