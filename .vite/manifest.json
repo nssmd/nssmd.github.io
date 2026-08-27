@@ -11,17 +11,18 @@
     "name": "rolldown-runtime"
   },
   "app/page.tsx": {
-    "file": "_next/static/chunks/page-SUFeR9YR.js",
+    "file": "_next/static/chunks/page-t5UYs0RO.js",
     "name": "page",
     "src": "app/page.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-C60lm6uB.js",
+      "virtual:vinext-app-browser-entry",
       "_framework-BgSIrAUN.js"
     ]
   },
   "node_modules/vinext/dist/shims/layout-segment-context.js": {
-    "file": "_next/static/chunks/layout-segment-context-BsnPWd_F.js",
+    "file": "_next/static/chunks/layout-segment-context-zYO8GUBx.js",
     "name": "layout-segment-context",
     "src": "node_modules/vinext/dist/shims/layout-segment-context.js",
     "isDynamicEntry": true,
@@ -32,7 +33,7 @@
     ]
   },
   "virtual:vinext-app-browser-entry": {
-    "file": "_next/static/chunks/index-DKBGy1m3.js",
+    "file": "_next/static/chunks/index-C81T1d_f.js",
     "name": "index",
     "src": "virtual:vinext-app-browser-entry",
     "isEntry": true,

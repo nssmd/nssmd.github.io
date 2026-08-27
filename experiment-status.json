@@ -1,0 +1,45 @@
+{
+  "updatedAt": "2026-08-27 01:06 PDT",
+  "current": "E1 · Offline RL vs Offline RFT",
+  "currentExperiment": "E1 · Offline RL vs Offline RFT",
+  "currentStep": "Step 1/5 · 先跑32条评分吞吐smoke，再补齐416条评分记录",
+  "computeBasis": "PAI-4041：8×L20X（143.8GB），当前8卡空闲；ETA按8 workers、185s/episode和15%调度开销计算。PAI-4042不计入。",
+  "items": [
+    {
+      "code": "E1-S1a",
+      "name": "视频评分吞吐Smoke",
+      "detail": "先测32条视频的真实评分耗时，用于计算全量ETA",
+      "done": 0,
+      "total": 32,
+      "status": "preparing",
+      "eta": "完成32条后更新"
+    },
+    {
+      "code": "E1-S1b",
+      "name": "全量视频评分记录",
+      "detail": "20个任务、416条预测视频",
+      "done": 0,
+      "total": 416,
+      "status": "queued",
+      "eta": "T416 = 13 × T32 ÷ 实际并发"
+    },
+    {
+      "code": "E1-S2",
+      "name": "Offline RL / RFT Pilot训练",
+      "detail": "6 tasks × 3 seeds × 2 methods",
+      "done": 0,
+      "total": 36,
+      "status": "queued",
+      "eta": "评分完成后约4-6h"
+    },
+    {
+      "code": "E1-S3",
+      "name": "Pilot Fresh Evaluation",
+      "detail": "Base / RFT / RL，共540个仿真episode",
+      "done": 0,
+      "total": 540,
+      "status": "queued",
+      "eta": "按8 workers约4h"
+    }
+  ]
+}

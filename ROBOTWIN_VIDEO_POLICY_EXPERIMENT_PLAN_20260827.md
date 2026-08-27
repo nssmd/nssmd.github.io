@@ -1,326 +1,117 @@
-# RoboTwin Video-Policy RL Experiment Plan
+# RoboTwin 实验编号、实时状态与排期
 
-**Date:** 2026-08-27  
-**Scope:** RoboTwin only  
-**Backbones:** LingBot-VA and Fast-WAM  
-**Frozen executor:** IDM/action decoder unless explicitly used as an ablation
+**更新时间：** 2026-08-27 01:06 PDT  
+**实验范围：** 仅 RoboTwin  
+**当前实验：** E1 · Offline RL vs Offline RFT  
+**当前步骤：** E1-S1 · 数据冻结与视频评分
 
-## 1. Paper Thesis
+## 1. 实验编号
 
-The paper studies whether a World-Action Model can be improved by optimizing
-its generated future videos as a policy, rather than only fine-tuning an action
-model or imitating successful videos.
+| 编号 | 实验 | 步骤 |
+|---|---|---|
+| E1 | Offline RL vs Offline RFT | S1 数据与评分；S2 Pilot训练；S3 Pilot评测；S4 10-seed主训练；S5主评测 |
+| E2 | Online RL vs Online RFT | S1状态集与Base；S2 Online RFT；S3 Online RL；S4六个checkpoint评测；S5画sample/step-success曲线 |
+| E3 | Offline DAgger vs Online DAgger | S1硬件与任务；S2 Offline DAgger；S3 Online DAgger；S4统一真机评测 |
+| E4 | Action-space RL消融 | S1复用冻结数据；S2训练；S3 matched fresh evaluation |
+| E5 | ODE Offline消融 | S1训练；S2 matched fresh evaluation；S3与E1汇总 |
+| E6 | Fast-WAM-IDM RL / RFT | S1接口与checkpoint；S2训练；S3 fresh evaluation |
+| E7 | LingBot-VA原版 RL / RFT | S1原版checkpoint；S2 RFT；S3 RL；S4 fresh evaluation |
 
-The main hypothesis is:
+## 2. 当前正在做什么
 
-> Direct video-space online RL can expand the distribution of executable
-> futures beyond a fixed offline dataset, and therefore improve robot success
-> more efficiently than reward-filtered fine-tuning or offline video RL.
+### E1-S1 · 数据冻结与视频评分
 
-## 2. Claims
+| 子步骤 | 工作量 | 完成 | 状态 | ETA |
+|---|---:|---:|---|---|
+| E1-S1a | 32条视频评分吞吐smoke | 0 / 32 | 准备中 | 完成后得到真实评分吞吐 |
+| E1-S1b | 416条历史视频评分记录 | 0 / 416 | 已排队 | `T416 = 13 × T32 ÷ 实际并发` |
+| E1-S2 | Offline RL / RFT Pilot训练 | 36个task-seed-method jobs | 0 / 36 | 评分完成后约4-6小时 |
+| E1-S3 | Pilot fresh evaluation | 540个episode | 0 / 540 | 按当前8 workers约4小时 |
 
-| Claim | Minimum convincing evidence |
+当前没有新的 RoboTwin RL 训练进程。E1-S1 完成后进入 E1-S2。
+
+## 3. 已经完成了什么
+
+| 项目 | 结果 |
 |---|---|
-| C1. A video reward can identify futures that are more likely to execute successfully. | On frozen same-state candidate banks, reward-top must beat random selection and correlate with simulator success across skill families. |
-| C2. Online video-space RL improves the WAM more than offline RFT and offline RL under matched samples and gradient updates. | Ten independent seeds; fresh-state success curves versus cumulative samples and gradient steps; online RL must exceed both offline methods. |
-| C3. The gain comes from optimizing the video policy, not the IDM, action policy, or a deterministic ODE mean. | Action-space RL, ODE-offline, fixed-SDE, and reward-component ablations. |
-| C4. The method transfers across explicit and implicit WAM variants. | Matched LingBot-VA, Fast-WAM-IDM, and Fast-WAM direct-action experiments. |
+| 历史数据盘点 | 20个任务，416条完整rollout |
+| 数据结果 | 266 success / 150 failure / 0 infra |
+| Low-seed fresh evaluation | 13 / 22 提升到 15 / 22 |
+| 完整 learned-SDE evaluation | 68 / 110 提升到 71 / 110 |
+| ODE mean-only evaluation | 145 / 220 下降到 133 / 220 |
+| Case Study | 5个case，10段预测/执行视频 |
+| 主任务集合 | 12个RoboTwin任务已固定 |
 
-## 3. RoboTwin Task Matrix
+## 4. Data
 
-The task list is frozen before outcome screening. Tasks are not removed because
-their first results are inconvenient.
+### 已有数据
 
-### Main 12 Tasks
+- 20个 RoboTwin 任务
+- 416条完整视频与仿真执行 rollout
+- 266条成功，占63.9%
+- 150条失败，占36.1%
+- 0条基础设施失败
 
-| Family | Task | Existing screen success |
-|---|---|---:|
-| Tool use | `beat_block_hammer` | 14/16 |
-| Tool use | `stamp_seal` | 12/16 |
-| Contact / articulation | `click_alarmclock` | 12/24 |
-| Contact / articulation | `turn_switch` | 5/24 |
-| Bimanual coordination | `lift_pot` | 18/24 |
-| Bimanual coordination | `handover_mic` | 23/24 |
-| Bimanual coordination | `scan_object` | 11/16 |
-| Bimanual coordination | `place_dual_shoes` | 12/16 |
-| Sequential manipulation | `place_bread_basket` | 7/24 |
-| Sequential manipulation | `place_burger_fries` | 23/24 |
-| Spatial relation | `place_a2b_left` | 13/16 |
-| Precision-control anchor | `move_stapler_pad` | 7/24 |
+### E1 Offline
 
-### Held-Out Transfer Tasks
+| 阶段 | Tasks | Seeds | States / task / seed | Paths / state | 总视频 |
+|---|---:|---:|---:|---:|---:|
+| Pilot | 6 | 3 | 4 | 4 | 288 |
+| Main | 12 | 10 | 4 | 4 | 1,920 |
 
-- `place_object_basket`
-- `move_can_pot`
-- `place_can_basket`
-- `place_container_plate`
+### E2 Online
 
-### Task-Selection Rule
+- 12个任务
+- 10个独立seed
+- RL和RFT各自最多3,072条online sample
+- 在0、192、384、768、1,536、3,072条sample时评测
 
-1. Freeze skill families and task names first.
-2. Search for informative environment states inside each task.
-3. Never replace a difficult skill family with another placement task.
-4. All methods use identical task, state, video, action, and flow-path seeds.
+## 5. Task
 
-## 4. Existing Data
+| 类别 | RoboTwin任务 |
+|---|---|
+| 工具使用 | `beat_block_hammer` |
+| 工具使用 | `stamp_seal` |
+| 接触与关节 | `click_alarmclock` |
+| 接触与关节 | `turn_switch` |
+| 双臂协作 | `lift_pot` |
+| 双臂协作 | `handover_mic` |
+| 双臂协作 | `scan_object` |
+| 双臂协作 | `place_dual_shoes` |
+| 多物体序列 | `place_bread_basket` |
+| 多物体序列 | `place_burger_fries` |
+| 空间关系 | `place_a2b_left` |
+| 精确控制 | `move_stapler_pad` |
 
-The historical RoboTwin screen contains:
+## 6. ETA计算依据
 
-- 20 tasks;
-- 416 complete simulator rollouts;
-- 266 success and 150 failure;
-- zero infrastructure exclusions;
-- four replayable video paths per environment state.
+2026-08-27 01:06 PDT 实测：
 
-This dataset is used for reward calibration and pilot training. The ten-seed
-main result uses a newly frozen state split.
+- PAI-4041：8张 NVIDIA L20X
+- 每张显存：143.8GB
+- 当时可用：8 / 8张
+- PAI-4042有其他训练和评测，不计入本实验算力
+- 仿真排期按8个并发worker计算
+- 历史同管线中位耗时按185秒/episode计算
+- 加15%调度、重启和落盘开销
+- 视频评分不使用GPU episode公式，先测E1-S1a的32条真实吞吐
 
-## 5. Video-First Reward
-
-Every WAM-generated video chunk receives its own reward. The main reward is not
-an action score and is not only the final simulator verdict.
-
-### 5.1 Predicted-Video Score
-
-`R_video` is computed from the language instruction and uniformly sampled
-frames from the imagined video:
-
-- visible task progress;
-- correct object and target identity;
-- correct manipulation stage;
-- temporal and contact continuity;
-- physical plausibility;
-- stable terminal configuration.
-
-### 5.2 Plan-Execution Agreement
-
-After the frozen IDM executes the video:
-
-- compare predicted and realized visual progress;
-- compare object relation, contact, and terminal configuration;
-- penalize imagined success that cannot be realized.
-
-This produces `R_agree`.
-
-### 5.3 Terminal Outcome
-
-`R_success` is the final RoboTwin simulator verdict and is used as an outcome
-bonus and the authoritative evaluation metric.
-
-### 5.4 Main Reward
-
-All components are normalized within the same-state candidate group:
+仿真估算公式：
 
 ```text
-R_total = 0.60 * R_video
-        + 0.25 * R_agree
-        + 0.15 * R_success
+wall_hours = episodes × 185秒 ÷ 8 workers ÷ 3600 × 1.15
 ```
 
-The weights are frozen before policy training. Video-only, agreement-only, and
-terminal-only rewards are ablations.
+## 7. 以后做什么
 
-## 6. Experiment Blocks
+| 顺序 | 编号 | 实验 | 规模 | 当前步骤 | 按当前算力预计 |
+|---:|---|---|---|---|---|
+| 1 | E1 | Offline RL vs Offline RFT | Pilot 6 tasks × 3 seeds；Main 12 tasks × 10 seeds | S1 / 5 | Pilot 8-10小时；Main 30-40小时 |
+| 2 | E2 | Online RL vs Online RFT | 12 tasks × 10 seeds；3,072 samples / method | S0 / 5 | 4-5天 |
+| 3 | E4 | Action-space RL消融 | 12 tasks × 3 seeds | S0 / 3 | 8-12小时 |
+| 4 | E5 | ODE Offline消融 | 12 tasks × 3 seeds | S0 / 3 | 8-12小时 |
+| 5 | E6 | Fast-WAM-IDM RL / RFT | 至少8 tasks × 3 seeds | S0 / 3 | 12-18小时 |
+| 6 | E7 | LingBot-VA原版 RL / RFT | 至少8 tasks × 3 seeds | S0 / 4 | 12-18小时 |
+| 7 | E3 | Offline DAgger vs Online DAgger | 4类真机任务 | S0 / 4 | GPU无法决定；硬件排期后计算 |
 
-## B0. Reward Validity
-
-**Purpose:** prove that the reward evaluates videos rather than merely
-reconstructing the final action outcome.
-
-- Data: historical 416-rollout candidate bank.
-- Methods: video-only, execution-only, combined reward, random, oracle.
-- Metrics:
-  - same-state success-over-failure pair accuracy;
-  - reward-top simulator success;
-  - random-K simulator success;
-  - rank correlation with task progress;
-  - false-positive imagined-success rate.
-- Gate:
-  - combined reward-top must beat random on at least four skill families;
-  - successful videos must rank above failed videos at least 70% of the time.
-
-## B1. Offline RL vs Offline RFT
-
-### Compared Systems
-
-1. Base WAM.
-2. Offline RFT: select reward-top video paths and maximize their likelihood.
-3. Offline RL: use all paths with same-state group-relative video reward.
-
-### Pilot
-
-- 6 skill-balanced tasks.
-- 3 independent seeds.
-- 4 training states per task.
-- 4 video paths per state.
-- 288 training videos total.
-- 10 fresh states per task for evaluation.
-
-### Main
-
-- 12 tasks.
-- 10 independent seeds.
-- Per seed: 4 training states per task and 4 paths per state.
-- 1,920 complete training videos across all seeds.
-- Fresh evaluation: 4 states per task, per seed, per policy.
-- Primary metric: final RoboTwin task success.
-- Secondary: video reward, plan-execution agreement, steps conditional on
-  success, and policy KL.
-
-## B2. Online RL vs Online RFT
-
-Both methods receive exactly the same online samples.
-
-### Online RFT
-
-1. Collect four videos from each state.
-2. Score every video.
-3. Keep reward-top videos.
-4. Fine-tune the video head.
-5. Recollect with the updated WAM.
-
-### Online RL
-
-1. Collect the same four videos.
-2. Score every video.
-3. Compute same-state relative advantages.
-4. Apply video-path PPO.
-5. Recollect with the updated WAM.
-
-### Curves
-
-Evaluate frozen fresh states after:
-
-```text
-gradient steps:       0, 1, 2, 4, 8, 16
-cumulative samples:   0, 192, 384, 768, 1536, 3072
-```
-
-Plot:
-
-- gradient step versus success rate;
-- cumulative simulator samples versus success rate;
-- video reward versus realized success;
-- success coverage across task families.
-
-## B3. Real-Robot DAgger
-
-Real-robot work is separated from the RoboTwin simulator denominator.
-
-### Offline DAgger
-
-- Collect human corrections.
-- Aggregate the full correction dataset.
-- Train between collection sessions.
-- Evaluate the frozen checkpoint.
-
-### Online DAgger
-
-- Collect corrections in batches of ten episodes.
-- Update the video head after each batch.
-- Continue collection with the updated policy.
-
-### Initial Real-Robot Skills
-
-- switch/button interaction;
-- precise object placement;
-- bimanual handover;
-- tool-target alignment.
-
-Metrics include success, interventions, correction frames, samples to success,
-and wall time.
-
-## B4. Required Ablations
-
-| Ablation | Question |
-|---|---|
-| Action-space RL | Is directly optimizing IDM/action diffusion better than video-space RL? |
-| ODE offline | Does deterministic reward-weighted video fitting work without stochastic path optimization? |
-| Fixed SDE | Is learned exploration necessary? |
-| Mean-only deployment | Does the learned video mean explain the gain? |
-| Video-only reward | Can imagined progress alone guide learning? |
-| Execution-only reward | Is the video scorer unnecessary? |
-| No agreement reward | Does plan-execution consistency matter? |
-| Terminal-only reward | Is dense per-video credit necessary? |
-| Offline data only | Is online recollection necessary? |
-
-## B5. Cross-Model Experiments
-
-### LingBot-VA
-
-- Original explicit future-video generation plus frozen IDM.
-- Offline RFT.
-- Offline video RL.
-- Online video RL.
-
-### Fast-WAM-IDM
-
-- Enable its future-video / IDM path.
-- Apply the same reward and matched RL/RFT protocol.
-
-### Fast-WAM Direct Action
-
-- Keep the original direct-action path.
-- Run action-space RL as the architecture-matched comparison.
-- Compare against Fast-WAM-IDM video-space RL.
-
-## 7. Metrics
-
-### Primary
-
-- final simulator task success;
-- task-family macro success;
-- ten-seed mean and confidence interval;
-- samples required to reach a fixed success level.
-
-### Reward Validity
-
-- reward-top success;
-- success/failure pair accuracy;
-- calibration of video score versus actual success;
-- imagined-success false-positive rate.
-
-### Efficiency
-
-- simulator episodes;
-- WAM calls;
-- gradient steps;
-- GPU time;
-- wall time;
-- tokens/VLM calls used by the video scorer.
-
-## 8. Run Order And ETA
-
-| Stage | Work | Estimated time on 8 GPUs |
-|---|---|---:|
-| M0 | Dataset index, case site, reward-scoring smoke | 6-10 hours |
-| M1 | Reward validity on existing 416 rollouts | 8-12 hours |
-| M2 | Offline RL/RFT pilot | 8-12 hours |
-| M3 | Ten-seed offline main | 2-3 days |
-| M4 | Online RL/RFT learning curves | 3-5 days |
-| M5 | Required ablations | 2-3 days |
-| M6 | LingBot-VA/Fast-WAM cross-model study | 3-5 days |
-| M7 | Real-robot DAgger | 3-5 hardware days |
-
-Paper-minimum simulation evidence is expected in approximately 5-7 days.
-The complete simulation package including cross-model extras is approximately
-10-14 days. Real-robot time is separate.
-
-## 9. Stop / Go Gates
-
-1. Do not start policy training until video reward beats random selection.
-2. Do not promote an offline checkpoint from training loss.
-3. Do not claim online benefit unless it beats online RFT at matched samples.
-4. Do not claim video-space benefit unless it beats action-space RL.
-5. Do not claim architecture generality until both LingBot-VA and Fast-WAM are
-   evaluated.
-6. Count success only from the final RoboTwin verdict.
-
-## 10. Paper Tables And Figures
-
-- **Table 1:** 12-task ten-seed main comparison.
-- **Figure 3:** gradient steps and cumulative samples versus success.
-- **Table 2:** action-space, ODE, reward, and online-refresh ablations.
-- **Table 3:** LingBot-VA versus Fast-WAM.
-- **Figure 4:** predicted video, realized video, reward decomposition, and
-  terminal outcome case studies.
+除真机外，在PAI-4041持续提供8张卡且没有基础设施中断的前提下，当前完整仿真排期约8-10天。E1-S1a完成后会用实测评分吞吐更新这一数字。
