@@ -1,0 +1,26 @@
+[
+  {
+    "place": "Shanghai Jiao Tong University, MVIG Lab",
+    "role": "Undergraduate Research Intern with Prof. Cewu Lu",
+    "focus": "Embodied intelligence, force-aware interaction, and vision-language-action systems.",
+    "date": "Oct 2024 – Present"
+  },
+  {
+    "place": "Microsoft Research Asia",
+    "role": "Tomorrow Star Program",
+    "focus": "Scaling laws of multimodal generative models, video generation, and multimodal training infrastructure.",
+    "date": "Jun 2025 – Dec 2025"
+  },
+  {
+    "place": "North Carolina State University, Wen’s Lab",
+    "role": "Machine Learning Security Research",
+    "focus": "Research on training-time data security.",
+    "date": "Jan 2025 – Feb 2025"
+  },
+  {
+    "place": "Shanghai Jiao Tong University, Collaborative Intelligence Technology Lab",
+    "role": "Time-Series Forecasting Research",
+    "focus": "Retrieval-augmented few-shot time-series forecasting, leading to DANet.",
+    "date": "Feb 2024 – Dec 2024"
+  }
+]

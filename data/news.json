@@ -1,0 +1,38 @@
+[
+  {
+    "id": "sensenova-u15",
+    "date": "2026-09",
+    "title": "SenseNova-U1.5",
+    "text": "technical report is now available."
+  },
+  {
+    "id": "roborsi",
+    "date": "2026-09",
+    "title": "RoboRSI",
+    "text": "research report and project demos are now available."
+  },
+  {
+    "id": "argus",
+    "date": "2026-08",
+    "title": "Argus",
+    "text": "preprint is available on arXiv."
+  },
+  {
+    "id": "mage-flow",
+    "date": "2026-07",
+    "title": "Mage-Flow",
+    "text": "preprint is available on arXiv."
+  },
+  {
+    "id": "resource2skill",
+    "date": "2026-06",
+    "title": "RESOURCE2SKILL",
+    "text": "preprint is available on arXiv."
+  },
+  {
+    "id": "unig2u",
+    "date": "2026-03",
+    "title": "UniG2U-Bench",
+    "text": "preprint is available on arXiv."
+  }
+]

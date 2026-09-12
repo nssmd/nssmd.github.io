@@ -1,53 +1,41 @@
 # Zimo Wen / nssmd 个人主页
 
-网站：https://nssmd.github.io/ 。发布仓库：https://github.com/nssmd/nssmd.github.io 。
+网站：https://nssmd.github.io/ · 仓库：https://github.com/nssmd/nssmd.github.io
 
-参考 https://waynejin0918.github.io/home/ 的学术主页结构重新实现。纯静态 HTML/CSS/JavaScript，无 npm 依赖，不需要构建服务即可浏览。9 篇论文按 Agentic Systems、Embodied AI & 3D Understanding、Multimodal Learning、Time Series & Dynamics 分类。
+按用户要求，以 [Weiyang Jin 的公开主页源码](https://github.com/WayneJin0918/home) 为样式基础。保留其字体、圆形头像、章节标题、项目分类、Experience 和 Community Contribution 布局，替换为 Zimo Wen 的资料。原始样式来自提交 `7e17d7ede80eb8d7bb19a6644f2f267889ec182c`，页脚保留来源链接。
 
-## 预览
+## 内容
 
-直接打开 `index.html`，或运行：
+- 11 个研究条目：Agentic Systems（5）、Multimodal Learning（1）、Time Series & Dynamics（3）、Technical Reports（2）。
+- RoboRSI 放入 Agentic Systems；SenseNova-U1.5 和 Mage-Flow 放入 Technical Reports。没有独立 Blog 栏目。
+- News 包含 RoboRSI、SenseNova-U1.5 及先前预印本动态。
+- Experience 根据本人 GitHub 历史 CV 资料填写，详见 `SOURCES.md`。
+- Community Contribution 包含 Argus、lmms-eval、lmms-engine 和 Flash Linear Attention。
+- 联系邮箱由用户明确提供：`2581235653@qq.com`。
+
+## 修改与预览
+
+- `data/profile.json`：简介、学籍、邮箱及个人信息。
+- `data/publications.json`：研究条目、分类、作者与官方链接。
+- `data/news.json`：新闻。
+- `data/experience.json`：实验室经历及时间。
+- `data/community.json`：社区贡献项目。
+- `style.css`：从参考仓库提取的基础样式；`custom.css`：视频、筛选、无障碍等本地补充。
+- `assets/media/`：官方项目视频、配图与封面；`assets/avatar.png`：GitHub 头像。
+
+更新 JSON 或模板后运行 `python build.py`，生成 `index.html`。生成器只依赖 Python 标准库。
 
 ```bash
-cd /data/yijia/zimo/nssmd-homepage
-python -m http.server 8765 --bind 0.0.0.0
+python build.py
+python -m http.server 8765
 ```
 
-浏览器访问 `http://localhost:8765`；在远程服务器上可通过 SSH 转发端口后访问。
+访问 `http://localhost:8765`。也可以直接打开 `index.html`。Google Fonts 用于还原参考站字体；断网时使用字体回退。内容和链接不依赖 JavaScript，年份/关键词筛选和视频自动播放为渐进增强。
 
-## 修改内容
+GitHub Pages 从 `main` 分支根目录发布，无需额外构建。页面路径使用相对资源地址。
 
-- `data/profile.json`：姓名、单位、简介、研究方向、社交链接及更新时间。可填写 `email` 显示邮件按钮。
-- `data/publications.json`：论文题目、作者、分类、年份和链接。
-- `data/blog.json`：独立的研究博客条目、视频、简介与链接，目前包含 RoboRSI。
-- `assets/avatar.png`：替换为自己的照片。
-- `style.css`：配色与响应式布局。
-- `build.py`：页面模板、近期论文动态及缺少公开配图时的主题示意图。
-- `assets/media/`：官方项目视频、视频封面与论文图。视频静音播放，提供原生播放和音量控件。
-- `SOURCES.md`：论文、项目、代码和媒体的公开来源。
+## 资料与既有文件
 
-修改 JSON 或模板后运行 `python build.py` 生成静态页面。修改 CSS、JS 或头像直接生效。
+公开来源、媒体来源与经历出处记录在 `SOURCES.md`。缺少公开视频时使用官方配图；DANet、PI-GNN 的主题示意图不代表实验结果。未核实的 Code/Scholar 链接不伪造。
 
-## 部署到 GitHub Pages
-
-1. 在 GitHub 创建 `nssmd.github.io` 仓库，将本目录网页文件上传到仓库根目录。
-2. 在 Settings → Pages 选择 Deploy from a branch，分支选择 `main`，目录选择 `/ (root)`。
-3. 等待发布完成后访问 `https://nssmd.github.io/`。
-
-也支持部署到项目仓库子路径，页面资源使用相对路径。`preview/` 仅用于本地截图，无需上传。
-
-## 内容来源与待补充项
-
-- 姓名、单位和 9 篇论文来自用户提供的 Google Scholar： https://scholar.google.ca/citations?user=H0r0cJkAAAAJ&hl=en ，读取日期为 2026-09-11。
-- GitHub 链接与头像来自 `https://github.com/nssmd` 的公开账户资料。
-- 简介和研究分组依据 Scholar 研究标签及论文标题整理，是可修改的初稿，未添加学位、导师、个人履历、录用消息或私人邮箱。
-- 作者列表已按 arXiv 和 Scholar 论文详情补全，Zimo Wen 加粗。Argus 采用 arXiv 当前版本的标题与作者顺序。
-- News 仅展示 arXiv 编号对应的预印本发布月份。会议标签采用 Scholar 的公开记录。
-- Argus、Resource2Skill、LIFT 使用官方项目视频；Tri-MARF、UniG2U、Mage-Flow、PAST 使用论文原图。DANet 与 PI-GNN 暂用主题示意图，不表示实验结果。
-- Website / Code 仅在已核实公开地址时显示，未公开或未找到的资源不伪造链接。
-- 参考网站仅用于布局参考，未使用其个人照片、介绍或论文素材。
-- 网站不实时抓取 Scholar；新增论文需要更新 JSON 并重新生成。
-
-## 保留原站文件
-
-发布时保留仓库已有的全部视频、实验文件和静态资源。原首页另存为 `previous-homepage-20260911.html`；只将根目录 `index.html` 更新为个人主页。
+原站所有视频和实验文件均保留，原首页归档为 `previous-homepage-20260911.html`。`preview/` 仅存本地预览截图，不参与发布。

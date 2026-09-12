@@ -5,12 +5,14 @@
   "affiliation_url": "https://en.sjtu.edu.cn/",
   "scholar": "https://scholar.google.ca/citations?user=H0r0cJkAAAAJ&hl=en",
   "github": "https://github.com/nssmd",
-  "email": "",
-  "updated": "September 2026",
-  "bio": "I am affiliated with Shanghai Jiao Tong University. My research interests center on embodied AI, with work spanning agentic systems, multimodal learning, and time-series modeling.",
+  "email": "2581235653@qq.com",
+  "updated": "September 12, 2026",
+  "bio": "I am an undergraduate researcher in Computer Science at Shanghai Jiao Tong University, in the Zhiyuan Honors Program and MVIG Lab, advised by Prof. Cewu Lu. My research interests span embodied intelligence, agentic systems, and multimodal models, with a focus on robot self-improvement, unified visual understanding and generation, and efficient learning systems.",
   "interests": [
     "Embodied AI",
     "Agentic Systems",
     "Multimodal Learning"
-  ]
+  ],
+  "role": "Undergraduate Researcher · Computer Science",
+  "program": "Zhiyuan Honors Program · MVIG Lab"
 }

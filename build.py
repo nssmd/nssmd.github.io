@@ -6,8 +6,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 profile = json.loads((ROOT / 'data/profile.json').read_text())
 papers = json.loads((ROOT / 'data/publications.json').read_text())
-posts = json.loads((ROOT / 'data/blog.json').read_text())
+updates = json.loads((ROOT / 'data/news.json').read_text())
+experience = json.loads((ROOT / 'data/experience.json').read_text())
+community = json.loads((ROOT / 'data/community.json').read_text())
 e = escape
+
+ICONS = {
+    'github': '<path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.86c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.5 9.5 0 0 1 12 6.82a9.5 9.5 0 0 1 2.5.34c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/>',
+    'scholar': '<path d="m2 9 10-6 10 6-10 6L2 9Zm4 3v6c4 3 8 3 12 0v-6M22 9v8"/>',
+    'paper': '<path d="M5 2h9l5 5v15H5V2Zm9 0v6h5M8 12h8M8 16h8"/>',
+    'website': '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
+    'agent': '<rect x="4" y="7" width="16" height="14" rx="3"/><path d="M12 7V3M10 3h4M2 12h2m16 0h2M9 16h6"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/>',
+    'image': '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="2"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
+    'chart': '<path d="M3 3v18h18M6 16l4-7 4 4 6-8"/>',
+    'video': '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="m10 8 6 4-6 4V8Z"/>',
+}
+
+def icon(name, cls=''):
+    return f'<svg class="icon {cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[name]}</svg>'
 
 def external(url, label, cls=''):
     return f'<a class="{cls}" href="{e(url, quote=True)}" target="_blank" rel="noopener noreferrer">{label}</a>'
@@ -31,44 +47,41 @@ def card(p):
     thumbnail(p)
     authors = e(p['authors']).replace('Zimo Wen', '<strong>Zimo Wen</strong>').replace('Z Wen', '<strong>Z Wen</strong>').replace('...', 'et al.')
     url = p['paper']
-    links = external(url, 'Paper <span aria-hidden="true">↗</span>')
-    for key, label in [('website', 'Website'), ('code', 'Code'), ('video_url', 'Video')]:
+    links = external(url, icon('paper')+e(p.get('paper_label', 'Paper')))
+    for key, label in [('website', 'Website'), ('code', 'Code'), ('models', 'Models'), ('video_url', 'Video')]:
         if p.get(key):
-            links += external(p[key], label+' <span aria-hidden="true">↗</span>')
-    links += external(p['scholar'], 'Scholar <span aria-hidden="true">↗</span>')
+            links += external(p[key], icon({'website':'website', 'code':'github', 'models':'website', 'video_url':'video'}[key])+label)
+    if p.get('scholar'):
+        links += external(p['scholar'], icon('scholar')+'Scholar')
     if p.get('video'):
-        media = f'<div class="paper-media"><video class="paper-video" controls muted loop playsinline preload="metadata" poster="{e(p["poster"])}" aria-label="{e(p["title"])} — official project video"><source src="{e(p["video"])}" type="video/mp4">{external(p["video"], "Watch project video")}</video><span class="media-caption">{e(p.get("video_note", "Project video"))}</span></div>'
+        media = f'<div class="paper-media"><video class="paper-video publogo" controls muted loop playsinline preload="metadata" poster="{e(p["poster"])}" aria-label="{e(p["title"])} — official project video"><source src="{e(p["video"])}" type="video/mp4">{external(p["video"], "Watch project video")}</video><span class="media-caption">{e(p.get("video_note", "Project video"))}</span></div>'
     else:
         img = p.get('image', f'assets/{p["id"]}.svg')
-        media = f'<a class="paper-image" href="{e(p.get("website", url))}" target="_blank" rel="noopener noreferrer" aria-label="View {e(p["title"])}"><img src="{e(img)}" width="520" height="340" alt="{e(p["id"])} research overview" loading="lazy"></a>'
-    return f'''<article class="paper" data-year="{p['year']}">
+        media = f'<a class="paper-image" href="{e(p.get("website", url))}" target="_blank" rel="noopener noreferrer" aria-label="View {e(p["title"])}"><img class="publogo" src="{e(img)}" width="520" height="340" alt="{e(p["id"])} research overview" loading="lazy"></a>'
+    badge_style = 'techreport' if 'Report' in p['badge'] else ('submitted' if p['badge'].startswith('arXiv') else 'accepted')
+    return f'''<article class="publication paper" id="{e(p['id'])}" data-year="{p['year']}">
       {media}
-      <div class="paper-content"><div class="paper-meta"><span class="venue {'conference' if not p['badge'].startswith('arXiv') else ''}">{e(p['badge'])}</span><span class="topic">{e(p['topic'])}</span></div>
-      <h3>{external(url, e(p['title']))}</h3><p class="authors">{authors}</p><p class="paper-summary">{e(p['summary'])}</p><div class="paper-links">{links}</div></div>
+      <div class="pub-content"><strong class="paper-title">{external(url, e(p['title']))}</strong><div class="authors">{authors}</div><div class="affiliation"><span>{e(p['topic'])}</span><span class="venue-badge {badge_style}">{e(p['badge'])}</span></div><div class="links paper-links">{links}</div></div>
     </article>'''
 
 groups = []
 for i, category in enumerate(dict.fromkeys(p['category'] for p in papers), 1):
     items = [p for p in papers if p['category'] == category]
-    groups.append(f'<details class="category" open><summary><span class="category-number">0{i}</span><span>{e(category)}</span><span class="count">{len(items)}</span><span class="chevron" aria-hidden="true">⌄</span></summary><div class="category-body">{"".join(card(p) for p in items)}</div></details>')
-
-blog_cards = []
-for post in posts:
-    blog_cards.append(f'''<article class="blog-entry">
-      <div class="paper-media"><video class="paper-video" controls muted loop playsinline preload="metadata" poster="{e(post['poster'])}" aria-label="{e(post['title'])} — official project video"><source src="{e(post['video'])}" type="video/mp4">{external(post['video'], 'Watch project video')}</video><span class="media-caption">{e(post['video_caption'])}</span></div>
-      <div class="blog-content"><div class="paper-meta"><span class="venue conference">{e(post['label'])}</span><span class="blog-publisher">{e(post['publisher'])}</span></div><h3>{external(post['url'], e(post['title']))}</h3><p>{e(post['summary'])}</p><div class="paper-links">{external(post['url'], 'Read Blog <span aria-hidden="true">↗</span>')}{external(post['code'], 'Code <span aria-hidden="true">↗</span>')}</div></div>
-    </article>''')
+    cat_icon = {'Agentic Systems':'agent', 'Multimodal Learning':'image', 'Time Series & Dynamics':'chart', 'Technical Reports':'paper'}[category]
+    groups.append(f'<details class="category" open><summary class="category-title">{icon(cat_icon, "cat-icon")}<span>{e(category)}</span><span class="category-count count">{len(items)}</span><span class="chevron" aria-hidden="true">›</span></summary><div class="category-body">{"".join(card(p) for p in items)}</div></details>')
 
 news = []
-for pid, date, title in [('argus', '2026 / 08', 'Argus'), ('mage-flow', '2026 / 07', 'Mage-Flow'), ('resource2skill', '2026 / 06', 'RESOURCE2SKILL'), ('unig2u', '2026 / 03', 'UniG2U-Bench')]:
-    p = next(p for p in papers if p['id'] == pid)
-    news.append(f'<li><time datetime="{date.replace(" / ", "-")}">{date}</time><span>{external("https://arxiv.org/abs/"+p["arxiv"], "<strong>"+title+"</strong>")} preprint is available on arXiv.</span></li>')
+for update in updates:
+    p = next(p for p in papers if p['id'] == update['id'])
+    news.append(f'<li><time class="news-date" datetime="{e(update["date"])}">{e(update["date"].replace("-", "/"))}</time><span>{external(p["paper"], "<strong>"+e(update["title"])+"</strong>")} {e(update["text"])}</span></li>')
 
-github_icon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.86c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.5 9.5 0 0 1 12 6.82a9.5 9.5 0 0 1 2.5.34c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>'
-scholar_icon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m2 9 10-6 10 6-10 6L2 9Zm4 3v6c4 3 8 3 12 0v-6M22 9v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
-social = external(profile['scholar'], scholar_icon+'Google Scholar', 'social-link') + external(profile['github'], github_icon+'GitHub', 'social-link')
+experience_rows = ''.join(f'<li class="experience-item"><div class="exp-details"><strong>{e(item["place"])}</strong><span>{e(item["role"])}</span><span class="exp-focus">{e(item["focus"])}</span></div><div class="exp-date">{e(item["date"])}</div></li>' for item in experience)
+community_rows = ''.join(f'<li class="experience-item"><div class="exp-details"><strong>{external(item["url"],e(item["name"]))}{", "+e(item["role"]) if item["role"] else ""}</strong><span class="community-description">{e(item["description"])}</span></div></li>' for item in community)
+
+social = external(profile['github'], icon('github')+'GitHub', 'social-link') + external(profile['scholar'], icon('scholar')+'Google Scholar', 'social-link')
+contact = ''
 if profile.get('email'):
-    social += f'<a class="social-link" href="mailto:{e(profile["email"], quote=True)}">Email ↗</a>'
+    contact = f'<div class="contact-info">Email: <a href="mailto:{e(profile["email"], quote=True)}">{e(profile["email"])}</a></div>'
 
 html = f'''<!doctype html>
 <html lang="en">
@@ -77,29 +90,30 @@ html = f'''<!doctype html>
   <title>{e(profile['name'])} ({e(profile['handle'])}) | Academic Homepage</title>
   <meta name="description" content="Zimo Wen (nssmd), Shanghai Jiao Tong University. Research in embodied AI, agentic systems, multimodal learning, and time-series modeling.">
   <meta name="theme-color" content="#ffffff"><meta property="og:title" content="Zimo Wen · nssmd"><meta property="og:description" content="Research, publications, and projects at Shanghai Jiao Tong University."><meta property="og:type" content="website"><meta property="og:url" content="https://nssmd.github.io/"><meta property="og:image" content="https://nssmd.github.io/assets/avatar.png"><link rel="canonical" href="https://nssmd.github.io/">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script src="script.js" defer></script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="custom.css"><script src="script.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="container">
-    <nav class="top-nav" aria-label="Main navigation"><a class="wordmark" href="#top">{e(profile['handle'])}<span>.</span></a><div><a href="#about">About</a><a href="#news">News</a><a href="#blog">Blog</a><a href="#research">Research</a></div></nav>
     <header class="profile-header">
-      <div class="profile-copy"><p class="eyebrow">RESEARCH · LEARNING · EXPLORATION</p><h1>{e(profile['name'])}</h1><p class="handle">@{e(profile['handle'])}</p><p class="affiliation">{external(profile['affiliation_url'], e(profile['affiliation']))}</p><p class="research-line">Embodied AI &amp; beyond.</p><div class="social-links">{social}</div></div>
-      <div class="portrait-wrap"><img class="portrait" src="assets/avatar.png" alt="{e(profile['name'])}'s GitHub avatar" width="260" height="260"><span class="portrait-caption">Stay curious. Keep building.</span></div>
+      <div class="bio-text"><h1>{e(profile['name'].upper())}</h1><div class="role-title"><b>{e(profile['role'])}</b><br>{external(profile['affiliation_url'], e(profile['affiliation']))}<br><span class="profile-program">{e(profile['program'])}</span></div>{contact}<div class="social-links">{social}</div><nav class="section-nav" aria-label="Main navigation"><a href="#research">Research</a><a href="#experience">Experience</a><a href="#community">Community</a><span>@{e(profile['handle'])}</span></nav></div>
+      <div class="profile-image-container"><img class="profile-photo" src="assets/avatar.png" alt="{e(profile['name'])}'s GitHub avatar" width="300" height="300"></div>
     </header>
     <main id="main">
-      <section id="about" aria-labelledby="about-title"><h2 id="about-title" class="section-title">Biography</h2><p class="biography">{e(profile['bio'])}</p><div class="interests">{''.join('<span>'+e(x)+'</span>' for x in profile['interests'])}</div></section>
-      <section id="news" aria-labelledby="news-title"><h2 id="news-title" class="section-title">News <span class="section-note">Recent research updates</span></h2><ul class="news-list">{''.join(news)}</ul></section>
-      <section id="blog" aria-labelledby="blog-title"><h2 id="blog-title" class="section-title">Blog <span class="section-note">Research in practice</span></h2>{''.join(blog_cards)}</section>
-      <section id="research" aria-labelledby="research-title"><h2 id="research-title" class="section-title">Research &amp; Publications <span class="section-note">2025 — 2026</span></h2><div class="research-intro"><p>A selection of questions I’ve been working on.</p>{external(profile['scholar'], 'Full list on Scholar ↗')}</div>
+      <section id="about" aria-labelledby="about-title"><h2 id="about-title" class="section-title">Biography</h2><p class="biography">{e(profile['bio'])}</p></section>
+      <section id="news" aria-labelledby="news-title"><h2 id="news-title" class="section-title">News</h2><ul class="news-scroll">{''.join(news)}</ul></section>
+      <section id="research" aria-labelledby="research-title"><h2 id="research-title" class="section-title">Selected Projects</h2>
         <div class="research-tools" hidden><div class="year-filters" role="group" aria-label="Filter publications by year"><button class="active" data-year="all" aria-pressed="true">All years</button><button data-year="2026" aria-pressed="false">2026</button><button data-year="2025" aria-pressed="false">2025</button></div><label class="search-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">Search publications</span><input type="search" id="paper-search" placeholder="Search publications…" autocomplete="off"></label></div>
         <p class="sr-only" id="filter-status" role="status" aria-live="polite"></p><div id="publication-list">{''.join(groups)}</div><p id="no-results" hidden>No publications match your search. Try another keyword or year.</p>
       </section>
+      <section id="experience" aria-labelledby="experience-title"><h2 id="experience-title" class="section-title">Experience</h2><ul class="experience-list">{experience_rows}</ul></section>
+      <section id="community" aria-labelledby="community-title"><h2 id="community-title" class="section-title">Community Contribution</h2><ul class="experience-list">{community_rows}</ul></section>
     </main>
-    <footer><div><a class="footer-name" href="#top">{e(profile['name'])}<span> / {e(profile['handle'])}</span></a><p>Last updated · {e(profile['updated'])}</p></div><a class="back-top" href="#top">Back to top ↑</a></footer>
+    <footer><p>{e(profile['name'])} · @{e(profile['handle'])}<br>Updated {e(profile['updated'])}</p><p>Website adapted from {external('https://github.com/WayneJin0918/home', 'Weiyang Jin')} · <a href="#top">Back to top ↑</a></p></footer>
   </div>
 </body>
 </html>
 '''
 (ROOT / 'index.html').write_text(html)
-print(f'Built index.html with {len(papers)} publications and {len(posts)} blog posts.')
+print(f'Built index.html with {len(papers)} research entries and {len(updates)} news items.')

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Argus",
+    "url": "https://github.com/microsoft/ArgusAgent",
+    "role": "",
+    "description": "A persistent, self-evolving agentic runtime for research and engineering."
+  },
+  {
+    "name": "lmms-eval",
+    "url": "https://github.com/EvolvingLMMs-Lab/lmms-eval",
+    "role": "Contributor",
+    "description": "A unified evaluation toolkit for multimodal models across text, image, video, and audio."
+  },
+  {
+    "name": "lmms-engine",
+    "url": "https://github.com/EvolvingLMMs-Lab/lmms-engine",
+    "role": "Contributor",
+    "description": "A flexible training engine for large multimodal models."
+  },
+  {
+    "name": "Flash Linear Attention",
+    "url": "https://github.com/fla-org/flash-linear-attention",
+    "role": "Contributor",
+    "description": "Efficient implementations and kernels for linear attention and related sequence models."
+  }
+]

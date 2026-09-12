@@ -1,0 +1,37 @@
+/* Additions for Zimo Wen's data, video previews, search, and accessibility. */
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+.icon{width:16px;height:16px;display:inline-block;flex-shrink:0;vertical-align:-2px}
+.profile-program{color:#666}
+.section-nav{display:flex;gap:16px;flex-wrap:wrap;margin-top:19px;font-size:12px}
+.section-nav span{color:#888}
+.category-title .cat-icon{color:var(--accent-color);width:19px;height:19px}
+.category-title .chevron{font-family:Arial,sans-serif;font-size:22px;line-height:1}
+.paper-media,.paper-image{width:180px;flex-shrink:0;display:block}
+.paper-video{display:block;aspect-ratio:16/10;object-fit:contain;background:#111}
+.paper-image img{display:block;max-height:180px;object-fit:contain;background:#fff}
+.media-caption{display:block;text-align:center;font-size:10px;line-height:1.5;color:#777;margin-top:6px}
+.pub-content .links a{display:inline-flex;align-items:center;gap:5px;min-height:28px;text-transform:none;letter-spacing:0}
+.pub-content .links .icon{width:14px;height:14px}
+.research-tools{display:flex;justify-content:space-between;gap:16px;align-items:center;margin:-8px 0 25px}
+.year-filters{display:flex;gap:5px}
+.year-filters button{border:0;border-radius:4px;background:transparent;color:#666;padding:6px 12px;cursor:pointer;font:inherit;font-size:13px}
+.year-filters button.active{background:#eef4fa;color:var(--primary-color);font-weight:700}
+.search-label{display:flex;align-items:center;gap:8px;border-bottom:1px solid #ddd;color:#888}
+.search-label svg{width:16px;height:16px}
+.search-label input{width:180px;padding:7px 0;border:0;background:transparent;color:#333;font:inherit;font-size:13px}
+.exp-focus{display:block;font-size:.92rem;margin-top:4px;color:#777!important}
+.exp-details{min-width:0;padding-right:18px}
+.community-description{display:block;margin-top:5px;font-size:.95rem}
+#no-results{text-align:center;color:#777;padding:30px 0}
+footer{margin-top:65px;padding:22px 0 10px;border-top:1px solid #eee;color:#888;font-size:12px;display:flex;justify-content:space-between;gap:20px}
+footer p{margin:0}
+footer a{color:#777}
+[hidden]{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.skip-link{position:fixed;top:10px;left:10px;z-index:10;background:#fff;padding:10px}
+.skip-link:not(:focus){clip-path:inset(50%);height:1px;width:1px;overflow:hidden;padding:0;white-space:nowrap}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--primary-color);outline-offset:4px}
+@media(max-width:768px){.section-nav{justify-content:center}.paper-media,.paper-image{width:100%;max-width:320px}.paper-video{margin-bottom:0;width:100%;box-sizing:border-box}.paper-image img{box-sizing:border-box;max-height:220px}.category-title{font-size:1.05rem}.news-scroll{max-height:156px}.profile-image-container img{box-sizing:border-box}.exp-details{padding-right:0}}
+@media(max-width:480px){.research-tools{flex-direction:column;align-items:stretch}.year-filters button{flex:1;min-height:40px}.search-label input{width:100%;min-height:30px}.category-title{gap:7px;padding:10px}.category-title .cat-icon{width:16px;height:16px}.contact-info a{overflow-wrap:anywhere}footer{flex-direction:column;gap:10px}.pub-content .links a{min-height:36px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+@media print{.research-tools,.section-nav,.paper-media,.skip-link{display:none!important}.publication{break-inside:avoid}.section-title{break-after:avoid}.category::details-content{content-visibility:visible!important}.paper[hidden],.category[hidden]{display:flex!important}}
