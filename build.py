@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 profile = json.loads((ROOT / 'data/profile.json').read_text())
 papers = json.loads((ROOT / 'data/publications.json').read_text())
+posts = json.loads((ROOT / 'data/blog.json').read_text())
 e = escape
 
 def external(url, label, cls=''):
@@ -51,6 +52,13 @@ for i, category in enumerate(dict.fromkeys(p['category'] for p in papers), 1):
     items = [p for p in papers if p['category'] == category]
     groups.append(f'<details class="category" open><summary><span class="category-number">0{i}</span><span>{e(category)}</span><span class="count">{len(items)}</span><span class="chevron" aria-hidden="true">⌄</span></summary><div class="category-body">{"".join(card(p) for p in items)}</div></details>')
 
+blog_cards = []
+for post in posts:
+    blog_cards.append(f'''<article class="blog-entry">
+      <div class="paper-media"><video class="paper-video" controls muted loop playsinline preload="metadata" poster="{e(post['poster'])}" aria-label="{e(post['title'])} — official project video"><source src="{e(post['video'])}" type="video/mp4">{external(post['video'], 'Watch project video')}</video><span class="media-caption">{e(post['video_caption'])}</span></div>
+      <div class="blog-content"><div class="paper-meta"><span class="venue conference">{e(post['label'])}</span><span class="blog-publisher">{e(post['publisher'])}</span></div><h3>{external(post['url'], e(post['title']))}</h3><p>{e(post['summary'])}</p><div class="paper-links">{external(post['url'], 'Read Blog <span aria-hidden="true">↗</span>')}{external(post['code'], 'Code <span aria-hidden="true">↗</span>')}</div></div>
+    </article>''')
+
 news = []
 for pid, date, title in [('argus', '2026 / 08', 'Argus'), ('mage-flow', '2026 / 07', 'Mage-Flow'), ('resource2skill', '2026 / 06', 'RESOURCE2SKILL'), ('unig2u', '2026 / 03', 'UniG2U-Bench')]:
     p = next(p for p in papers if p['id'] == pid)
@@ -74,7 +82,7 @@ html = f'''<!doctype html>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="container">
-    <nav class="top-nav" aria-label="Main navigation"><a class="wordmark" href="#top">{e(profile['handle'])}<span>.</span></a><div><a href="#about">About</a><a href="#news">News</a><a href="#research">Research</a></div></nav>
+    <nav class="top-nav" aria-label="Main navigation"><a class="wordmark" href="#top">{e(profile['handle'])}<span>.</span></a><div><a href="#about">About</a><a href="#news">News</a><a href="#blog">Blog</a><a href="#research">Research</a></div></nav>
     <header class="profile-header">
       <div class="profile-copy"><p class="eyebrow">RESEARCH · LEARNING · EXPLORATION</p><h1>{e(profile['name'])}</h1><p class="handle">@{e(profile['handle'])}</p><p class="affiliation">{external(profile['affiliation_url'], e(profile['affiliation']))}</p><p class="research-line">Embodied AI &amp; beyond.</p><div class="social-links">{social}</div></div>
       <div class="portrait-wrap"><img class="portrait" src="assets/avatar.png" alt="{e(profile['name'])}'s GitHub avatar" width="260" height="260"><span class="portrait-caption">Stay curious. Keep building.</span></div>
@@ -82,6 +90,7 @@ html = f'''<!doctype html>
     <main id="main">
       <section id="about" aria-labelledby="about-title"><h2 id="about-title" class="section-title">Biography</h2><p class="biography">{e(profile['bio'])}</p><div class="interests">{''.join('<span>'+e(x)+'</span>' for x in profile['interests'])}</div></section>
       <section id="news" aria-labelledby="news-title"><h2 id="news-title" class="section-title">News <span class="section-note">Recent research updates</span></h2><ul class="news-list">{''.join(news)}</ul></section>
+      <section id="blog" aria-labelledby="blog-title"><h2 id="blog-title" class="section-title">Blog <span class="section-note">Research in practice</span></h2>{''.join(blog_cards)}</section>
       <section id="research" aria-labelledby="research-title"><h2 id="research-title" class="section-title">Research &amp; Publications <span class="section-note">2025 — 2026</span></h2><div class="research-intro"><p>A selection of questions I’ve been working on.</p>{external(profile['scholar'], 'Full list on Scholar ↗')}</div>
         <div class="research-tools" hidden><div class="year-filters" role="group" aria-label="Filter publications by year"><button class="active" data-year="all" aria-pressed="true">All years</button><button data-year="2026" aria-pressed="false">2026</button><button data-year="2025" aria-pressed="false">2025</button></div><label class="search-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">Search publications</span><input type="search" id="paper-search" placeholder="Search publications…" autocomplete="off"></label></div>
         <p class="sr-only" id="filter-status" role="status" aria-live="polite"></p><div id="publication-list">{''.join(groups)}</div><p id="no-results" hidden>No publications match your search. Try another keyword or year.</p>
@@ -93,4 +102,4 @@ html = f'''<!doctype html>
 </html>
 '''
 (ROOT / 'index.html').write_text(html)
-print(f'Built index.html with {len(papers)} publications.')
+print(f'Built index.html with {len(papers)} publications and {len(posts)} blog posts.')

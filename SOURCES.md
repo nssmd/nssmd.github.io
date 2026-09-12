@@ -1,5 +1,9 @@
 # Public sources
 
+## Research blog
+
+RoboRSI is listed separately as a **Research Blog** from NOEMATRIX LAB, linking to https://lab.noematrix.ai/blog/2-roborsi/ and https://github.com/nssmd/RoboRSI . The earlier `/blog/2-roborsi-research-preview/` address redirects to this canonical blog. Its description is based on the official page's metadata and Method introduction. The embedded real-world demonstration and poster come from `https://lab.noematrix.ai/assets/roborsi/real-world/physical-final-demo-robot-v1.mp4?v=20260901-9` and the corresponding `.jpg?v=20260901-9`. These public media are mirrored without editing. This entry is not counted as a Scholar publication.
+
 Verified on 2026-09-11. Profile and publication membership come from [Zimo Wen's Google Scholar](https://scholar.google.ca/citations?user=H0r0cJkAAAAJ&hl=en). Full author names are taken from arXiv citation metadata or Scholar article details. No employment history or degree status is inferred.
 
 | Work | Paper | Website | Code |

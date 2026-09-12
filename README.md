@@ -19,6 +19,7 @@ python -m http.server 8765 --bind 0.0.0.0
 
 - `data/profile.json`：姓名、单位、简介、研究方向、社交链接及更新时间。可填写 `email` 显示邮件按钮。
 - `data/publications.json`：论文题目、作者、分类、年份和链接。
+- `data/blog.json`：独立的研究博客条目、视频、简介与链接，目前包含 RoboRSI。
 - `assets/avatar.png`：替换为自己的照片。
 - `style.css`：配色与响应式布局。
 - `build.py`：页面模板、近期论文动态及缺少公开配图时的主题示意图。
