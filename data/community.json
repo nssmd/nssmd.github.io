@@ -1,11 +1,5 @@
 [
   {
-    "name": "Argus",
-    "url": "https://github.com/microsoft/ArgusAgent",
-    "role": "",
-    "description": "A persistent, self-evolving agentic runtime for research and engineering."
-  },
-  {
     "name": "lmms-eval",
     "url": "https://github.com/EvolvingLMMs-Lab/lmms-eval",
     "role": "Contributor",
