@@ -45,7 +45,14 @@ def thumbnail(p):
 
 def card(p):
     thumbnail(p)
-    authors = e(p['authors']).replace('Zimo Wen', '<strong>Zimo Wen</strong>').replace('Z Wen', '<strong>Z Wen</strong>').replace('...', 'et al.')
+    equal_count = p.get('equal_contribution_count', 0)
+    authors = ', '.join(
+        e(name).replace('Zimo Wen', '<strong>Zimo Wen</strong>').replace('Z Wen', '<strong>Z Wen</strong>').replace('...', 'et al.')
+        + ('<sup title="Equal contribution">*</sup>' if i < equal_count else '')
+        for i, name in enumerate(p['authors'].split(', '))
+    )
+    if equal_count:
+        authors += ' <span class="equal-contribution-note">(* equal contribution)</span>'
     url = p['paper']
     links = external(url, icon('paper')+e(p.get('paper_label', 'Paper')))
     for key, label in [('website', 'Website'), ('code', 'Code'), ('models', 'Models'), ('video_url', 'Video')]:
@@ -67,7 +74,7 @@ def card(p):
 groups = []
 for i, category in enumerate(dict.fromkeys(p['category'] for p in papers), 1):
     items = [p for p in papers if p['category'] == category]
-    cat_icon = {'Agentic Systems':'agent', 'Multimodal Learning':'image', 'Time Series & Dynamics':'chart', 'Technical Reports':'paper'}[category]
+    cat_icon = {'Agentic Systems':'agent', 'Robotics':'agent', 'Multimodal Learning':'image', 'Time Series & Dynamics':'chart', 'Technical Reports':'paper'}[category]
     groups.append(f'<details class="category" open><summary class="category-title">{icon(cat_icon, "cat-icon")}<span>{e(category)}</span><span class="category-count count">{len(items)}</span><span class="chevron" aria-hidden="true">›</span></summary><div class="category-body">{"".join(card(p) for p in items)}</div></details>')
 
 news = []

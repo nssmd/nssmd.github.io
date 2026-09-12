@@ -17,7 +17,8 @@
     "poster": "assets/media/argus.webp",
     "video_url": "https://www.youtube.com/watch?v=i8Qy9HCboQE",
     "media_source": "https://argusbot.cn/",
-    "paper": "https://arxiv.org/abs/2608.05144"
+    "paper": "https://arxiv.org/abs/2608.05144",
+    "equal_contribution_count": 3
   },
   {
     "title": "RESOURCE2SKILL: Distilling Executable Agent Skills from Human-Created Multimodal Resources",
@@ -37,14 +38,15 @@
     "poster": "assets/media/resource2skill.webp",
     "video_url": "https://www.youtube.com/watch?v=03gtIwEZX7s",
     "media_source": "https://microsoft.github.io/Resource2Skill/",
-    "paper": "https://arxiv.org/abs/2606.29538"
+    "paper": "https://arxiv.org/abs/2606.29538",
+    "equal_contribution_count": 3
   },
   {
     "id": "roborsi",
     "title": "RoboRSI: Stable, Efficient, and Reusable Robot Self-Evolution",
     "authors": "Noematrix Team",
     "year": "2026",
-    "category": "Agentic Systems",
+    "category": "Robotics",
     "badge": "Research Report · 2026",
     "arxiv": null,
     "summary": "Execution, diagnosis, and skill updates in a continuous loop for robot self-improvement.",
@@ -65,7 +67,7 @@
     "venue": "arXiv preprint arXiv:2607.14236, 2026",
     "year": "2026",
     "id": "force",
-    "category": "Agentic Systems",
+    "category": "Robotics",
     "badge": "arXiv 2026",
     "arxiv": "2607.14236",
     "summary": "Reactive force for robot policy adaptation.",
@@ -75,7 +77,8 @@
     "poster": "assets/media/force.webp",
     "media_source": "https://lift-policy.github.io/",
     "video_note": "LIFT · towel folding",
-    "paper": "https://arxiv.org/abs/2607.14236"
+    "paper": "https://arxiv.org/abs/2607.14236",
+    "equal_contribution_count": 3
   },
   {
     "title": "Tri-MARF: A Tri-Modal Multi-Agent Responsive Framework for Comprehensive 3D Object Annotation",
@@ -92,7 +95,8 @@
     "image": "assets/media/tri-marf.webp",
     "media_source": "https://arxiv.org/html/2601.04404v1#S1.F2",
     "paper": "https://arxiv.org/abs/2601.04404",
-    "website": "https://neurips.cc/virtual/2025/poster/117433"
+    "website": "https://neurips.cc/virtual/2025/poster/117433",
+    "equal_contribution_count": 3
   },
   {
     "title": "UniG2U-Bench: Do Unified Models Advance Multimodal Understanding?",
