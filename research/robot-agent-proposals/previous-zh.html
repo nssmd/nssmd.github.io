@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robot Agent · Research Proposals | Zimo Wen</title>
+  <meta name="description" content="Robot Agent 的三个独立研究方向：上下文学习、底层控制与即时响应。在线预览和下载三份六页 proposal 与十八页合订版。">
+  <link rel="canonical" href="https://nssmd.github.io/research/robot-agent-proposals/previous-zh.html">
+  <meta property="og:title" content="Robot Agent · Three Research Proposals">
+  <meta property="og:description" content="上下文学习、底层控制与即时响应。三份独立 proposal，在线预览与 PDF 下载。">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="reader.css">
+  <script src="reader-previous.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#reader">跳转到文档预览</a>
+  <div class="shell">
+    <header>
+      <a class="back" href="../../">← Zimo Wen</a>
+      <p class="eyebrow">RESEARCH PROPOSALS · SEPTEMBER 2026</p>
+      <h1>Robot Agent</h1><p class="archive-note">早期中文草稿：原方向包含上下文学习。<a href="./">查看最新英文版（底层控制、即时响应、GPT-guided DAgger）→</a></p>
+      <p class="subtitle">上下文学习、底层控制与即时响应</p>
+      <p class="intro">三个独立研究方向，每份包含三个技术方案、pipeline、实验设计与预期结果分析。</p>
+      <div class="header-actions">
+        <a class="primary" href="pdf/Robot_Agent_Three_Proposals_Combined.pdf" download>下载合订版 <span>PDF · 18 页</span></a>
+        <a class="secondary" href="pdf/Robot_Agent_Three_Proposals_Combined.pdf" target="_blank" rel="noopener">在新窗口打开 PDF ↗</a>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside aria-label="选择研究文档">
+        <h2 class="label">研究方向</h2>
+        <div class="document-list">
+          <button class="document" type="button" data-doc="icl" aria-pressed="true" aria-controls="reader">
+            <span class="number">01</span><span><strong>上下文学习</strong><span class="english">In-context learning</span><span class="details">经验检索 · 轨迹示范 · 主动探测</span></span><span class="length">6 页</span>
+          </button>
+          <button class="document" type="button" data-doc="control" aria-pressed="false" aria-controls="reader">
+            <span class="number">02</span><span><strong>底层控制</strong><span class="english">Low-level control</span><span class="details">反馈程序 · 接触参数 · 关节残差</span></span><span class="length">6 页</span>
+          </button>
+          <button class="document" type="button" data-doc="response" aria-pressed="false" aria-controls="reader">
+            <span class="number">03</span><span><strong>即时响应</strong><span class="english">Responsive execution</span><span class="details">事件触发 · 异步执行 · 预测控制</span></span><span class="length">6 页</span>
+          </button>
+          <button class="document combined" type="button" data-doc="combined" aria-pressed="false" aria-controls="reader">
+            <span class="number">↳</span><span><strong>完整合订版</strong><span class="english">All three proposals</span></span><span class="length">18 页</span>
+          </button>
+        </div>
+        <div class="downloads">
+          <h2 class="label">分别下载</h2>
+          <a href="pdf/01_in_context_learning.pdf" download>01 · 上下文学习 <span>PDF ↓</span></a>
+          <a href="pdf/02_low_level_control.pdf" download>02 · 底层控制 <span>PDF ↓</span></a>
+          <a href="pdf/03_realtime_response.pdf" download>03 · 即时响应 <span>PDF ↓</span></a>
+        </div>
+        <p class="note">中文正文 · 每份 6 页<br>研究提案中的方法和实验为拟议设计。</p>
+      </aside>
+
+      <section id="reader" aria-labelledby="document-title">
+        <div class="reader-heading"><div><p class="label">在线预览</p><h2 id="document-title">上下文学习</h2></div><a id="open-pdf" href="pdf/01_in_context_learning.pdf" target="_blank" rel="noopener">打开 PDF ↗</a></div>
+        <div class="toolbar">
+          <button id="previous" type="button" disabled aria-label="上一页">← <span>上一页</span></button>
+          <label for="page-select">页码 <select id="page-select" aria-label="选择预览页码"><option value="1">1 / 6</option><option value="2">2 / 6</option><option value="3">3 / 6</option><option value="4">4 / 6</option><option value="5">5 / 6</option><option value="6">6 / 6</option></select></label>
+          <button id="next" type="button" aria-label="下一页"><span>下一页</span> →</button>
+        </div>
+        <p id="page-status" class="sr-only" role="status" aria-live="polite">上下文学习，第 1 页，共 6 页</p>
+        <div class="page-surface" aria-busy="false">
+          <img id="page-image" src="pages/icl-01.webp" width="1072" height="1516" alt="上下文学习，第 1 页，共 6 页" fetchpriority="high">
+          <p id="image-error" hidden>这一页暂时未能加载，请重试，或使用上方“打开 PDF”阅读完整文档。</p>
+        </div>
+        <div class="reader-bottom"><p>可用页码菜单跳页，或用键盘 ← → 翻页。</p><a id="download-current" href="pdf/01_in_context_learning.pdf" download>下载当前文档 ↓</a></div>
+        <noscript><p>逐页预览需要 JavaScript。你仍可使用页面上的 PDF 链接打开和下载完整文档。</p></noscript>
+      </section>
+    </main>
+    <footer><span>Zimo Wen · Research Proposals</span><a href="../../">返回个人主页 ↗</a></footer>
+  </div>
+</body>
+</html>
