@@ -20,6 +20,7 @@
 - `data/news.json`：新闻。
 - `data/experience.json`：实验室经历及时间。
 - `data/community.json`：社区贡献项目。
+- `research/robot-agent-proposals/`：Robot Agent 三份独立 proposal 的逐页预览、单份 PDF 与 18 页合订版下载；预览使用 PDF 页面导出的 WebP，支持手机、键盘翻页与页码深链接。
 - `style.css`：从参考仓库提取的基础样式；`custom.css`：视频、筛选、无障碍等本地补充。
 - `assets/media/`：官方项目视频、配图与封面；`assets/avatar.png`：GitHub 头像。
 

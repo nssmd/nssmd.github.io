@@ -104,7 +104,7 @@ html = f'''<!doctype html>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="container">
     <header class="profile-header">
-      <div class="bio-text"><h1>{e(profile['name'].upper())}</h1><div class="role-title"><b>{e(profile['role'])}</b><br>{external(profile['affiliation_url'], e(profile['affiliation']))}<br><span class="profile-program">{e(profile['program'])}</span></div>{contact}<div class="social-links">{social}</div><nav class="section-nav" aria-label="Main navigation"><a href="#research">Research</a><a href="#experience">Experience</a><a href="#community">Community</a><span>@{e(profile['handle'])}</span></nav></div>
+      <div class="bio-text"><h1>{e(profile['name'].upper())}</h1><div class="role-title"><b>{e(profile['role'])}</b><br>{external(profile['affiliation_url'], e(profile['affiliation']))}<br><span class="profile-program">{e(profile['program'])}</span></div>{contact}<div class="social-links">{social}</div><nav class="section-nav" aria-label="Main navigation"><a href="#research">Research</a><a href="research/robot-agent-proposals/">Proposals</a><a href="#experience">Experience</a><a href="#community">Community</a><span>@{e(profile['handle'])}</span></nav></div>
       <div class="profile-image-container"><img class="profile-photo" src="assets/avatar.png" alt="{e(profile['name'])}'s GitHub avatar" width="300" height="300"></div>
     </header>
     <main id="main">
