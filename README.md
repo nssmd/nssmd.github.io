@@ -20,7 +20,7 @@
 - `data/news.json`：新闻。
 - `data/experience.json`：实验室经历及时间。
 - `data/community.json`：社区贡献项目。
-- `research/robot-agent-proposals/`：Robot Agent 三份英文 paper proposal（底层控制、即时响应、GPT-reviewed VLA with EEF correction）的逐页预览、单份 PDF 与 18 页合订版下载；预览使用 PDF 页面导出的 WebP，支持手机、键盘翻页与页码深链接。旧方向的中文草稿保留在 `previous-zh.html`。
+- `research/robot-agent-proposals/`：Robot Agent 三份英文 paper proposal（System 0 与场景相关力位控制、agent 生成的状态机与反馈 policy、GPT-reviewed VLA with EEF correction）的逐页预览、单份 PDF 与 18 页合订版下载；预览使用 PDF 页面导出的 WebP，支持手机、键盘翻页与页码深链接。旧方向的中文草稿保留在 `previous-zh.html`。
 - `style.css`：从参考仓库提取的基础样式；`custom.css`：视频、筛选、无障碍等本地补充。
 - `assets/media/`：官方项目视频、配图与封面；`assets/avatar.png`：GitHub 头像。
 

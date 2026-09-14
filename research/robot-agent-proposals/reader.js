@@ -1,10 +1,10 @@
 "use strict";
 (() => {
   const files = {
-    control: { title: "Low-level control", file: "01_low_level_control_en.pdf", count: 6 },
-    response: { title: "Responsive execution", file: "02_responsive_execution_en.pdf", count: 6 },
+    control: { title: "Better manipulation", file: "01_manipulation_system0_force_en.pdf", count: 6 },
+    response: { title: "Reactive policy synthesis", file: "02_agent_generated_reactive_policies_en.pdf", count: 6 },
     review: { title: "GPT-reviewed VLA", file: "03_gpt_reviewed_vla_en.pdf", count: 6 },
-    combined: { title: "Complete collection", file: "Robot_Agent_Control_Response_Review_EN.pdf", count: 18 }
+    combined: { title: "Complete collection", file: "Robot_Agent_Manipulation_Reactivity_Review_EN.pdf", count: 18 }
   };
   const groups = ["control", "response", "review"];
   const image = document.getElementById("page-image");
