@@ -3,10 +3,10 @@
   const files = {
     control: { title: "Low-level control", file: "01_low_level_control_en.pdf", count: 6 },
     response: { title: "Responsive execution", file: "02_responsive_execution_en.pdf", count: 6 },
-    dagger: { title: "GPT-guided DAgger for VLA", file: "03_gpt_dagger_vla_en.pdf", count: 6 },
-    combined: { title: "Complete collection", file: "Robot_Agent_Three_Paper_Proposals_EN.pdf", count: 18 }
+    review: { title: "GPT-reviewed VLA", file: "03_gpt_reviewed_vla_en.pdf", count: 6 },
+    combined: { title: "Complete collection", file: "Robot_Agent_Control_Response_Review_EN.pdf", count: 18 }
   };
-  const groups = ["control", "response", "dagger"];
+  const groups = ["control", "response", "review"];
   const image = document.getElementById("page-image");
   const surface = document.querySelector(".page-surface");
   const select = document.getElementById("page-select");
@@ -17,8 +17,8 @@
   let page = 1;
 
   function render() {
-    const match = /^#(control|response|dagger|combined)(?:\/page-(\d+))?$/.exec(location.hash);
-    current = match ? match[1] : "control";
+    const match = /^#(control|response|review|dagger|combined)(?:\/page-(\d+))?$/.exec(location.hash);
+    current = match ? (match[1] === "dagger" ? "review" : match[1]) : "control";
     const info = files[current];
     page = Math.min(info.count, Math.max(1, Number(match && match[2]) || 1));
     document.getElementById("document-title").textContent = info.title;
