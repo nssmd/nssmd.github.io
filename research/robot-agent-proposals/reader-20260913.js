@@ -3,10 +3,10 @@
   const files = {
     control: { title: "Better manipulation", file: "01_manipulation_system0_force_en.pdf", count: 6 },
     response: { title: "Reactive policy synthesis", file: "02_agent_generated_reactive_policies_en.pdf", count: 6 },
-    review: { title: "GPT-6 + ROS 2", file: "03_gpt6_ros_supervision_en.pdf", count: 6 },
-    combined: { title: "Complete collection", file: "Robot_Agent_Control_Response_ROS_GPT6_EN_20260914.pdf", count: 18 }
+    review: { title: "GPT-reviewed VLA", file: "03_gpt_reviewed_vla_en.pdf", count: 6 },
+    combined: { title: "Complete collection", file: "Robot_Agent_Manipulation_Reactivity_Review_EN.pdf", count: 18 }
   };
-  const groups = ["control", "response", "ros"];
+  const groups = ["control", "response", "review"];
   const image = document.getElementById("page-image");
   const surface = document.querySelector(".page-surface");
   const select = document.getElementById("page-select");
@@ -39,7 +39,7 @@
     const pdf = `pdf/${info.file}`;
     document.getElementById("open-pdf").href = pdf;
     document.getElementById("download-current").href = pdf;
-    const group = current === "combined" ? groups[Math.floor((page - 1) / 6)] : (current === "review" ? "ros" : current);
+    const group = current === "combined" ? groups[Math.floor((page - 1) / 6)] : current;
     const leaf = (page - 1) % 6 + 1;
     const src = `pages/en/${group}-${String(leaf).padStart(2, "0")}.webp`;
     if (image.getAttribute("src") !== src) {
