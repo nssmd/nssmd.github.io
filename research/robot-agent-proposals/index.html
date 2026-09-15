@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Robot Agent · Three Paper Proposals | Zimo Wen</title>
-  <meta name="description" content="Three independent research proposals: System 0 and grounded force-position control, agent-generated reactive policies, and GPT-6 task orchestration, code repair, and ROS 2 arm execution. Read the English PDFs online or download the 18-page collection.">
+  <meta name="description" content="Three independent research proposals: System 0 and grounded force-position control, agent-generated reactive policies, and GP6 task DAGs, VLA policies, and cross-host multi-robot interaction over ROS 2. Read the English PDFs online or download the 18-page collection.">
   <link rel="canonical" href="https://nssmd.github.io/research/robot-agent-proposals/">
   <meta property="og:title" content="Robot Agent · Three Independent Paper Proposals">
-  <meta property="og:description" content="Better manipulation. Agent-generated reactive policies. GPT-6 task orchestration, code repair, and ROS 2 arm execution. Three six-page English proposals with methods, pipelines, and experimental designs.">
+  <meta property="og:description" content="Better manipulation. Agent-generated reactive policies. GP6 task DAGs, VLA policies, and cross-host multi-robot interaction over ROS 2. Three six-page English proposals with methods, pipelines, and experimental designs.">
   <meta property="og:type" content="website">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="reader.css">
-  <script src="reader.js?v=20260914-gpt6-ros" defer></script>
+  <script src="reader.js?v=20260914-multihost" defer></script>
 </head>
 <body>
   <a class="skip" href="#reader">Skip to document preview</a>
@@ -20,12 +20,12 @@
       <div class="top-links"><a class="back" href="../../">← Zimo Wen</a><a class="archive-link" href="previous-20260913-en.html">Previous English edition ↗</a></div>
       <p class="eyebrow">RESEARCH PROPOSALS · SEPTEMBER 2026</p>
       <h1>Robot Agent</h1>
-      <p class="subtitle">Low-level control. Immediate response. GPT-6 + ROS 2.</p>
-      <p class="intro">Better manipulation through System 0 actions and grounded force-position control; agent-generated state machines and broader feedback policies; GPT-6 task orchestration, code repair, and ROS 2 arm execution. Three independent papers, each with a pipeline and concrete experiments.</p>
-      <p class="intro" lang="zh-CN">三份提案：底层控制、即时响应，以及 GPT-6 统筹与代码修正 + ROS 2 底层执行。第三份采用单步末端修正，并单列关节增量接口；VLA 是可选方案。<a href="previous-zh.html">早期中文稿</a>保留作历史版本。</p>
+      <p class="subtitle">Low-level control. Immediate response. Multi-robot interaction.</p>
+      <p class="intro">Better manipulation through System 0 actions and grounded force-position control; agent-generated state machines and broader feedback policies; GP6 task DAGs, VLA policies, and cross-host multi-robot interaction over ROS 2. Three independent papers, each with a pipeline and concrete experiments.</p>
+      <p class="intro" lang="zh-CN">三份提案：底层控制、即时响应，以及 GP6 + VLA + ROS 2 多机协作运行时。第三份以跨机器的多机器人交互为核心：GP6 生成任务 DAG，VLA 与代码策略执行节点，ROS 2 连接分布式控制器、传感器与执行反馈。<a href="previous-zh.html">早期中文稿</a>保留作历史版本。</p>
       <div class="header-actions">
-        <a class="primary" href="pdf/Robot_Agent_Control_Response_ROS_GPT6_EN_20260914.pdf" download>Download collection <span>PDF · 18 pages</span></a>
-        <a class="secondary" href="pdf/Robot_Agent_Control_Response_ROS_GPT6_EN_20260914.pdf" target="_blank" rel="noopener">Open English PDF ↗</a>
+        <a class="primary" href="pdf/Robot_Agent_Control_Response_MultiRobot_EN_20260914.pdf" download>Download collection <span>PDF · 18 pages</span></a>
+        <a class="secondary" href="pdf/Robot_Agent_Control_Response_MultiRobot_EN_20260914.pdf" target="_blank" rel="noopener">Open English PDF ↗</a>
       </div>
     </header>
     <main class="layout">
@@ -39,7 +39,7 @@
             <span class="number">02</span><span><strong>Reactive policy synthesis</strong><span class="english">Agent-generated feedback policies</span><span class="details">State machines · Stateful code · Constraints</span></span><span class="length">6 pages</span>
           </button>
           <button class="document" type="button" data-doc="review" aria-pressed="false" aria-controls="reader">
-            <span class="number">03</span><span><strong>GPT-6 + ROS 2</strong><span class="english">Task orchestration · Code repair</span><span class="details">ROS execution · Single-step arm correction</span></span><span class="length">6 pages</span>
+            <span class="number">03</span><span><strong>Multi-robot interaction</strong><span class="english">GP6 DAG · VLA · Distributed ROS 2</span><span class="details">Cross-host coordination · Failure recovery</span></span><span class="length">6 pages</span>
           </button>
           <button class="document combined" type="button" data-doc="combined" aria-pressed="false" aria-controls="reader">
             <span class="number">↳</span><span><strong>Complete collection</strong><span class="english">All three paper proposals</span></span><span class="length">18 pages</span>
@@ -49,7 +49,7 @@
           <h2 class="label">INDIVIDUAL DOWNLOADS</h2>
           <a href="pdf/01_manipulation_system0_force_en.pdf" download>01 · Better manipulation <span>PDF ↓</span></a>
           <a href="pdf/02_agent_generated_reactive_policies_en.pdf" download>02 · Reactive policy synthesis <span>PDF ↓</span></a>
-          <a href="pdf/03_gpt6_ros_supervision_en.pdf" download>03 · GPT-6 + ROS 2 <span>PDF ↓</span></a>
+          <a href="pdf/03_multirobot_runtime_en.pdf" download>03 · Multi-robot interaction <span>PDF ↓</span></a>
         </div>
         <p class="note">Revised September 14, 2026<br>English · 6 pages per proposal<br>Methods and experiments describe proposed research, not reported results.</p>
       </aside>
