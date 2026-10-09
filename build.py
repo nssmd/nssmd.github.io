@@ -55,6 +55,8 @@ def card(p):
         authors += ' <span class="equal-contribution-note">(* equal contribution)</span>'
     url = p['paper']
     links = external(url, icon('paper')+e(p.get('paper_label', 'Paper')))
+    for extra in p.get('extra_links', []):
+        links += external(extra['url'], icon('paper')+e(extra['label']))
     for key, label in [('website', 'Website'), ('code', 'Code'), ('models', 'Models'), ('video_url', 'Video')]:
         if p.get(key):
             links += external(p[key], icon({'website':'website', 'code':'github', 'models':'website', 'video_url':'video'}[key])+label)

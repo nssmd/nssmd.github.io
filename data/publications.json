@@ -48,7 +48,7 @@
     "year": "2026",
     "category": "Robotics",
     "badge": "Research Report · 2026",
-    "arxiv": null,
+    "arxiv": "2610.12424",
     "summary": "Execution, diagnosis, and skill updates in a continuous loop for robot self-improvement.",
     "topic": "Robot self-improvement",
     "paper": "https://lab.noematrix.ai/blog/2-roborsi/",
@@ -58,7 +58,13 @@
     "video": "assets/media/roborsi.mp4",
     "poster": "assets/media/roborsi.jpg",
     "video_note": "RoboRSI · project demonstration",
-    "media_source": "https://lab.noematrix.ai/blog/2-roborsi/"
+    "media_source": "https://lab.noematrix.ai/blog/2-roborsi/",
+    "extra_links": [
+      {
+        "label": "Paper",
+        "url": "https://arxiv.org/html/2610.12424v1"
+      }
+    ]
   },
   {
     "title": "Never Too Late for Force: Accelerating VLA Post-Training with Reactive Force Injection",
