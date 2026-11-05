@@ -4,6 +4,7 @@ from html import escape as esc
 from datetime import datetime
 import json,re,math
 import markdown,yaml
+from compass_components import components,DOC
 
 ROOT=Path(__file__).resolve().parents[1]
 ORIGIN='https://nssmd.github.io'
@@ -54,6 +55,8 @@ def build():
             case=cases[0]
             excerpt=json.dumps({'program':case['plan'],'goal_state':case['goal_state']},indent=2)
             rendered=rendered.replace('<!-- SCENECODE_EXCERPT -->','<figure class="recorded-code"><div class="code-caption">SceneCode · recorded execution</div><pre><code>'+esc(excerpt)+'</code></pre><figcaption>A compact excerpt from the color-order stacking case.</figcaption></figure>')
+            for marker,value in components(ROOT).items():rendered=rendered.replace(marker,value)
+            rendered+='<a class="review-dock" href="'+DOC+'" target="_blank" rel="noopener" data-review-open>Comment in Google Doc ↗</a><a class="selection-review" href="'+DOC+'" target="_blank" rel="noopener" hidden>Copy quote & open Doc ↗</a><div class="review-toast" role="status" aria-live="polite"></div>'
         words=len(re.findall(r'\b\w+\b',re.sub('<[^>]+>',' ',rendered)));minutes=max(1,math.ceil(words/220))
         post={**meta,'date':date,'url':'/blog/'+slug+'/','html':rendered,'toc':md.toc,'minutes':minutes,'source':path.name}
         posts.append(post)
@@ -61,7 +64,7 @@ def build():
     for post in posts:
         title=post['title'];url=post['url'];date=datetime.strptime(post['date'],'%Y-%m-%d').strftime('%B %d, %Y');cover=post.get('cover','/assets/avatar.png')
         wordmark=post.get('wordmark',title);subtitle=post.get('subtitle','');description=post['description']
-        actions='<a class="pill-button primary" href="#cases">Explore the cases <span>↓</span></a><a class="pill-button" href="https://github.com/nssmd/compass">Code ↗</a>' if post['slug']=='compass' else ''
+        actions='<a class="pill-button primary" href="#pipeline">How it works <span>↓</span></a><a class="pill-button" href="#case-studies">SceneCode in motion ↓</a><a class="pill-button" href="'+DOC+'" target="_blank" rel="noopener">Google Doc ↗</a>' if post['slug']=='compass' else ''
         hero=''
         if post.get('hero_video'):
             hero=f'<figure class="hero-film"><video controls muted loop playsinline preload="metadata" poster="{cover}" aria-label="{esc(title,quote=True)}"><source src="{post["hero_video"]}" type="video/mp4"></video><figcaption>{esc(post.get("hero_caption",""))}</figcaption></figure>'

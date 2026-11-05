@@ -46,3 +46,11 @@ The original nine publications were verified on 2026-09-11 against [Zimo Wen's G
 Videos are hosted locally under `assets/media/` to avoid third-party hotlink restrictions. They remain unedited. Preview posters are frames from the respective videos. Paper images are resized to WebP for delivery; source images are retained. All media remain attributable to their original authors.
 
 PI-GNN and DANet DOI metadata were confirmed through Crossref and Scholar. Publisher pages may restrict automated requests; these are their canonical publication links.
+
+
+## COMPASS 方法与同步执行展示（2026-11-05）
+
+- SceneCode、encoder 和 pipeline 说明来自 COMPASS 自身实现与实验文稿。默认 encoder 使用两层 768 维隐层，融合几何/状态和视觉特征，输出 2048 维注入向量，加入 PaliGemma 第 10 层语言 token 残差。
+- 11 个 case 的程序来自各自记录；三个深入 case 的 SceneCode 更新来自 `loop_sys2_*.json` 与 `sys2_log.json`，没有补写或插值推理结果。
+- 原始记录视频与控制步满足初始帧加每步一帧；25 FPS 下，第 k 步映射到 k/25 秒。网页对象锚点依据原图尺寸转换，时序核对保存在项目本地同步审计文件中。
+- 博客与 Doc 是两个展示/评阅版本；Google Doc 直接承接协作评论。

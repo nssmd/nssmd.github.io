@@ -63,3 +63,16 @@ python -m http.server 8766
 发布现在由 `.github/workflows/pages.yml` 完成，沿用原静态文件和 `.nojekyll`，保留原站项目资源路径。
 
 Blog 用于初步设想（Ideas）、论文解读（Paper notes）和研究随想（Reflections）；`content/blog/` 已准备三类草稿模板。主页导航、Blog 区域以及 Research 标题旁均有入口。
+
+
+## COMPASS 方法文章与批注
+
+`/blog/compass/` 包含 SceneCode 字段说明、完整 pipeline、encoder 网络与训练机制、三个同步 case study 和 11 类执行视频。三个播放器使用控制步与视频帧的一一对应关系，在记录的 review 时间更新 SceneCode；可切换场景代码、命令、检查和 3D 目标，也可打开已经将代码渲染在旁边的 MP4。
+
+- 页面组件：`tools/compass_components.py`。
+- 记录数据：`blog/assets/compass/scenecode-traces.json`。
+- 原始图像锚点使用 640×480 坐标，覆盖到 640×360 视频时按两个方向分别缩放。
+- 在 HTML 选中文字或点击视频的 **Comment at this moment**，会复制对应段落、时间和网页链接，并打开原英文 Google Doc；将上下文粘贴到 Doc 评论即可讨论。共享评论在 Google Doc 中完成。
+- Google Doc 使用正文结构，没有附录；普通共享访问者可批注，账号所有者保留编辑权限。
+
+公共页面只包含展示所需的 SceneCode 数据，不包含 API 响应身份、认证信息或原始内部日志。
