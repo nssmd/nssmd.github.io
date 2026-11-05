@@ -61,3 +61,5 @@ python -m http.server 8766
 博客样式与交互位于 `blog/blog.css` 和 `blog/blog.js`。COMPASS 视频与精选执行数据位于 `blog/assets/compass/`；所有 case 来自 COMPASS 自身的 t2v3 运行，参考 RoboRSI 的展示结构，没有使用其视频作为 COMPASS 结果。
 
 发布现在由 `.github/workflows/pages.yml` 完成，沿用原静态文件和 `.nojekyll`，保留原站项目资源路径。
+
+Blog 用于初步设想（Ideas）、论文解读（Paper notes）和研究随想（Reflections）；`content/blog/` 已准备三类草稿模板。主页导航、Blog 区域以及 Research 标题旁均有入口。
