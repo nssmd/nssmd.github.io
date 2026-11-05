@@ -1,0 +1,37 @@
+name: Publish homepage and blog
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install Markdown==3.8.2 PyYAML==6.0.2 Pygments==2.19.2
+      - run: python build.py
+      - run: python tools/build_blog.py
+      - name: Prepare static site
+        run: |
+          mkdir -p /tmp/pages-site
+          rsync -a --exclude='.git' --exclude='.github' --exclude='content' --exclude='tools' --exclude='preview' --exclude='__pycache__' ./ /tmp/pages-site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/pages-site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,418 @@
+[
+  {
+    "id": "stack_blocks_by_language",
+    "title": "Stack in the requested order",
+    "category": "Planning",
+    "description": "Orange on the bottom, yellow in the middle, red on top.",
+    "plan": [
+      "Use the orange block as the tower base.",
+      "Place the yellow block centered on the orange block.",
+      "Place the red block centered on the yellow block.",
+      "Return the active robot arm to its reset pose."
+    ],
+    "summary": "Create one vertical tower with the orange block on the bottom, yellow block in the middle, and red block on top. After completing the stack, return the active robot arm to its reset pose.",
+    "goal_state": [
+      "on_top(yellow_block, orange_block)",
+      "on_top(red_block, yellow_block)",
+      "upright_stack(orange_block, yellow_block, red_block)",
+      "reset(active_robot_arm)"
+    ],
+    "checks": [
+      "base_of_stack(orange_block)",
+      "on_top(yellow_block, orange_block)",
+      "on_top(red_block, yellow_block)",
+      "reset(active_robot_arm)"
+    ],
+    "duration": 14.2,
+    "video": "/blog/assets/compass/stack_blocks_by_language.mp4",
+    "all_cameras": "/blog/assets/compass/stack_blocks_by_language-cameras.mp4",
+    "poster": "/blog/assets/compass/stack_blocks_by_language-poster.webp",
+    "before": "/blog/assets/compass/stack_blocks_by_language-before.webp",
+    "after": "/blog/assets/compass/stack_blocks_by_language-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "build_tower",
+    "title": "Reproduce a layered structure",
+    "category": "Planning",
+    "description": "Build the demonstrated tower, including the boards and green roof.",
+    "plan": [
+      "Place two white blocks as separated lower supports.",
+      "Bridge the lower supports with the long board.",
+      "Place two white blocks on the long board.",
+      "Bridge the upper supports with the short board.",
+      "Center the brown block on the short board.",
+      "Stack the green roof block on the brown block."
+    ],
+    "summary": "Build a stable, centered tower from the two wooden boards and the available blocks. Reproduce the demonstrated layered structure, finishing with the green roof-shaped block at the top.",
+    "goal_state": [
+      "on(white_block_1, table)",
+      "on(white_block_2, table)",
+      "on_top(long_wooden_board, white_block_1)",
+      "on_top(long_wooden_board, white_block_2)",
+      "on_top(white_block_3, long_wooden_board)",
+      "on_top(white_block_4, long_wooden_board)",
+      "on_top(short_wooden_board, white_block_3)",
+      "on_top(short_wooden_board, white_block_4)",
+      "on_top(brown_wooden_block, short_wooden_board)",
+      "on_top(green_roof_block, brown_wooden_block)",
+      "stable(tower)"
+    ],
+    "checks": [
+      "both lower white blocks rest stably on the table",
+      "long board rests across both lower white blocks",
+      "both upper white blocks rest on the long board",
+      "short board rests across both upper white blocks",
+      "brown wooden block is centered on the short board",
+      "green roof block is stable atop the brown block"
+    ],
+    "duration": 28.04,
+    "video": "/blog/assets/compass/build_tower.mp4",
+    "all_cameras": "/blog/assets/compass/build_tower-cameras.mp4",
+    "poster": "/blog/assets/compass/build_tower-poster.webp",
+    "before": "/blog/assets/compass/build_tower-before.webp",
+    "after": "/blog/assets/compass/build_tower-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "cover_blocks",
+    "title": "Remember what is under each cup",
+    "category": "Memory",
+    "description": "Cover the blocks, then uncover red, green, and blue in that order.",
+    "plan": [
+      "Cover the left green block with the left yellow cup.",
+      "Cover the middle blue block with the middle yellow cup.",
+      "Cover the right red block with the right yellow cup.",
+      "Remove the cup from the red block.",
+      "Remove the cup from the green block.",
+      "Remove the cup from the blue block."
+    ],
+    "summary": "Cover the three colored blocks with the yellow cups from left to right, preserving their positions. Then remove the cups in the specified color order: red first, green second, and blue last.",
+    "goal_state": [
+      "covered_by(green_block, left_yellow_cup)",
+      "covered_by(blue_block, middle_yellow_cup)",
+      "covered_by(red_block, right_yellow_cup)",
+      "uncovered(red_block)",
+      "uncovered(green_block)",
+      "uncovered(blue_block)",
+      "uncover_order(red_block, green_block, blue_block)"
+    ],
+    "checks": [
+      "covered_by(green_block, left_yellow_cup)",
+      "covered_by(blue_block, middle_yellow_cup)",
+      "covered_by(red_block, right_yellow_cup)",
+      "uncovered(red_block)",
+      "uncovered(green_block)",
+      "uncovered(blue_block)"
+    ],
+    "duration": 21.36,
+    "video": "/blog/assets/compass/cover_blocks.mp4",
+    "all_cameras": "/blog/assets/compass/cover_blocks-cameras.mp4",
+    "poster": "/blog/assets/compass/cover_blocks-poster.webp",
+    "before": "/blog/assets/compass/cover_blocks-before.webp",
+    "after": "/blog/assets/compass/cover_blocks-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "match_and_pick_from_conveyor",
+    "title": "Recognize the returning object",
+    "category": "Memory",
+    "description": "Remember the first object and pick it when it appears again.",
+    "plan": [
+      "Memorize the first anime figurine's identity and appearance.",
+      "Let the first figurine and nonmatches pass unpicked.",
+      "Detect the next identical anime figurine.",
+      "Pick the matching figurine from the conveyor."
+    ],
+    "summary": "Observe and remember the first object arriving on the conveyor. Ignore intervening objects, then pick the same object when it appears a second time.",
+    "goal_state": [
+      "remembered(first_anime_figurine)",
+      "picked(second_occurrence_of_first_anime_figurine)",
+      "not_picked(intervening_nonmatching_objects)"
+    ],
+    "checks": [
+      "remembered(first_anime_figurine)",
+      "not_picked(first_anime_figurine)",
+      "detected(second_occurrence_of_first_anime_figurine)",
+      "picked(second_occurrence_of_first_anime_figurine)"
+    ],
+    "duration": 9.8,
+    "video": "/blog/assets/compass/match_and_pick_from_conveyor.mp4",
+    "all_cameras": "/blog/assets/compass/match_and_pick_from_conveyor-cameras.mp4",
+    "poster": "/blog/assets/compass/match_and_pick_from_conveyor-poster.webp",
+    "before": "/blog/assets/compass/match_and_pick_from_conveyor-before.webp",
+    "after": "/blog/assets/compass/match_and_pick_from_conveyor-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "general_pickup",
+    "title": "Pick the specified object",
+    "category": "Grounding",
+    "description": "Find the mint-green scissors and lift them by 10 cm.",
+    "plan": [
+      "Grasp the mint green scissors safely.",
+      "Lift the scissors vertically by 10 cm."
+    ],
+    "summary": "Grasp the mint green scissors and lift them 10 cm above their starting position. Keep the scissors securely held at the target height.",
+    "goal_state": [
+      "held(mint_green_scissors)",
+      "elevated_by(mint_green_scissors,10_cm)"
+    ],
+    "checks": [
+      "held(mint_green_scissors)",
+      "elevated_by(mint_green_scissors,10_cm)"
+    ],
+    "duration": 2.36,
+    "video": "/blog/assets/compass/general_pickup.mp4",
+    "all_cameras": "/blog/assets/compass/general_pickup-cameras.mp4",
+    "poster": "/blog/assets/compass/general_pickup-poster.webp",
+    "before": "/blog/assets/compass/general_pickup-before.webp",
+    "after": "/blog/assets/compass/general_pickup-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "classify_objects",
+    "title": "Sort from a demonstration",
+    "category": "Grounding",
+    "description": "Match the demonstrated object categories to the three baskets.",
+    "plan": [
+      "Place all three plush toys into the blue basket.",
+      "Place both wrist accessories into the white basket.",
+      "Place both writing instruments into the red basket."
+    ],
+    "summary": "Sort every object on the table into the basket assigned to its category. Following the demonstration, watches or wrist accessories go into the white left basket, toys into the blue middle basket, and writing instruments into the red right basket.",
+    "goal_state": [
+      "inside(plush_toy_left, middle_basket)",
+      "inside(plush_toy_center, middle_basket)",
+      "inside(plush_toy_right, middle_basket)",
+      "inside(silver_wrist_accessory, left_basket)",
+      "inside(black_wrist_accessory, left_basket)",
+      "inside(black_gold_pen, right_basket)",
+      "inside(white_pen, right_basket)"
+    ],
+    "checks": [
+      "inside(plush_toy_left, middle_basket) and inside(plush_toy_center, middle_basket) and inside(plush_toy_right, middle_basket)",
+      "inside(silver_wrist_accessory, left_basket) and inside(black_wrist_accessory, left_basket)",
+      "inside(black_gold_pen, right_basket) and inside(white_pen, right_basket)"
+    ],
+    "duration": 31.88,
+    "video": "/blog/assets/compass/classify_objects.mp4",
+    "all_cameras": "/blog/assets/compass/classify_objects-cameras.mp4",
+    "poster": "/blog/assets/compass/classify_objects-poster.webp",
+    "before": "/blog/assets/compass/classify_objects-before.webp",
+    "after": "/blog/assets/compass/classify_objects-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "insert_tubes",
+    "title": "Place each tube in the rack",
+    "category": "Precision",
+    "description": "Insert all three tubes upright, one at a time.",
+    "plan": [
+      "Pick and insert the right tube upright into the rack.",
+      "Pick and insert the upper-left tube into another hole.",
+      "Pick and insert the lower-left tube into another hole."
+    ],
+    "summary": "Place all three capped tubes into the tube rack, handling them individually. Each tube must finish upright and securely seated in a separate rack opening.",
+    "goal_state": [
+      "inside(upper_left_tube, tube_rack)",
+      "inside(lower_left_tube, tube_rack)",
+      "inside(right_tube, tube_rack)",
+      "separate_holes(upper_left_tube, lower_left_tube, right_tube)",
+      "upright(upper_left_tube)",
+      "upright(lower_left_tube)",
+      "upright(right_tube)",
+      "caps_facing_up(upper_left_tube, lower_left_tube, right_tube)"
+    ],
+    "checks": [
+      "inside(right_tube, tube_rack)",
+      "inside(upper_left_tube, tube_rack)",
+      "inside(lower_left_tube, tube_rack)"
+    ],
+    "duration": 16.72,
+    "video": "/blog/assets/compass/insert_tubes.mp4",
+    "all_cameras": "/blog/assets/compass/insert_tubes-cameras.mp4",
+    "poster": "/blog/assets/compass/insert_tubes-poster.webp",
+    "before": "/blog/assets/compass/insert_tubes-before.webp",
+    "after": "/blog/assets/compass/insert_tubes-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "fasten_screws",
+    "title": "Match and fasten the screws",
+    "category": "Precision",
+    "description": "Pair each screw with the nut of the same color.",
+    "plan": [
+      "Match each pink screw with the pink nut.",
+      "Insert and tighten the pink screw.",
+      "Match each blue screw with the blue nut.",
+      "Insert and tighten the blue screw.",
+      "Match the white screw with the white nut.",
+      "Insert and tighten the white screw.",
+      "Verify every screw is seated in a same-color nut."
+    ],
+    "summary": "Insert every colored screw into the nut of the same color and tighten each pair securely. Do not mix colors; each screw must end fully seated in its matching nut.",
+    "goal_state": [
+      "inserted(pink_screw_left, pink_nut_left)",
+      "tightened(pink_screw_left, pink_nut_left)",
+      "inserted(blue_screw_left, blue_nut_right)",
+      "tightened(blue_screw_left, blue_nut_right)",
+      "inserted(blue_screw_right, blue_nut_right)",
+      "tightened(blue_screw_right, blue_nut_right)",
+      "inserted(white_screw_right, white_nut_center)",
+      "tightened(white_screw_right, white_nut_center)"
+    ],
+    "checks": [
+      "same_color(pink_screw_left, pink_nut_left)",
+      "tightened(pink_screw_left, pink_nut_left)",
+      "same_color(blue_screw_left, blue_nut_right)",
+      "tightened(blue_screw_left, blue_nut_right)",
+      "same_color(blue_screw_right, blue_nut_right)",
+      "tightened(blue_screw_right, blue_nut_right)",
+      "same_color(white_screw_right, white_nut_center)",
+      "tightened(white_screw_right, white_nut_center)",
+      "all_screws_inserted_and_tightened"
+    ],
+    "duration": 38.24,
+    "video": "/blog/assets/compass/fasten_screws.mp4",
+    "all_cameras": "/blog/assets/compass/fasten_screws-cameras.mp4",
+    "poster": "/blog/assets/compass/fasten_screws-poster.webp",
+    "before": "/blog/assets/compass/fasten_screws-before.webp",
+    "after": "/blog/assets/compass/fasten_screws-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "fill_pen_holder",
+    "title": "Hold with one hand, fill with the other",
+    "category": "Coordination",
+    "description": "Keep the holder upright while inserting all four writing tools.",
+    "plan": [
+      "Grasp and hold the orange pen holder upright.",
+      "Insert the black pen with the free hand.",
+      "Insert the purple pen with the free hand.",
+      "Insert the white pen with the free hand.",
+      "Insert the cyan pen with the free hand.",
+      "Place the filled holder upright on the table."
+    ],
+    "summary": "Stabilize the orange pen holder with one hand while using the other hand to place all four loose writing tools inside it. After every tool is inserted, return the filled holder upright to the table.",
+    "goal_state": [
+      "inside(black_pen, pen_holder)",
+      "inside(purple_pen, pen_holder)",
+      "inside(white_pen, pen_holder)",
+      "inside(cyan_pen, pen_holder)",
+      "on(pen_holder, table)",
+      "upright(pen_holder)"
+    ],
+    "checks": [
+      "held_upright(pen_holder)",
+      "inside(black_pen, pen_holder)",
+      "inside(purple_pen, pen_holder)",
+      "inside(white_pen, pen_holder)",
+      "inside(cyan_pen, pen_holder)",
+      "on(pen_holder, table) and upright(pen_holder)"
+    ],
+    "duration": 27.44,
+    "video": "/blog/assets/compass/fill_pen_holder.mp4",
+    "all_cameras": "/blog/assets/compass/fill_pen_holder-cameras.mp4",
+    "poster": "/blog/assets/compass/fill_pen_holder-poster.webp",
+    "before": "/blog/assets/compass/fill_pen_holder-before.webp",
+    "after": "/blog/assets/compass/fill_pen_holder-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "put_bottles_into_dustbin",
+    "title": "Clear the tabletop",
+    "category": "Coordination",
+    "description": "Dispose of the bottles, using a handover when needed.",
+    "plan": [
+      "Pick up the pink bottle.",
+      "Handover the pink bottle if needed.",
+      "Throw the pink bottle into a dustbin.",
+      "Pick up the yellow bottle.",
+      "Throw the yellow bottle into a dustbin.",
+      "Pick up the white bottle.",
+      "Throw the white bottle into a dustbin.",
+      "Pick up the green bottle.",
+      "Throw the green bottle into a dustbin.",
+      "Pick up the beige bottle.",
+      "Throw the beige bottle into a dustbin."
+    ],
+    "summary": "Pick up every bottle on the tabletop and dispose of it in a dustbin. Use a handover between arms when an object is out of reach or cannot be safely carried by one arm.",
+    "goal_state": [
+      "inside(pink_bottle, left_dustbin_or_right_dustbin)",
+      "inside(yellow_bottle, left_dustbin_or_right_dustbin)",
+      "inside(white_bottle, left_dustbin_or_right_dustbin)",
+      "inside(green_bottle, left_dustbin_or_right_dustbin)",
+      "inside(beige_bottle, left_dustbin_or_right_dustbin)",
+      "tabletop_clear_of_bottles"
+    ],
+    "checks": [
+      "held_or_removed(pink_bottle)",
+      "handover_completed_or_not_needed(pink_bottle)",
+      "inside(pink_bottle, dustbin)",
+      "inside(yellow_bottle, dustbin)",
+      "inside(white_bottle, dustbin)",
+      "inside(green_bottle, dustbin)",
+      "inside(beige_bottle, dustbin)",
+      "tabletop_clear_of_bottles"
+    ],
+    "duration": 19.08,
+    "video": "/blog/assets/compass/put_bottles_into_dustbin.mp4",
+    "all_cameras": "/blog/assets/compass/put_bottles_into_dustbin-cameras.mp4",
+    "poster": "/blog/assets/compass/put_bottles_into_dustbin-poster.webp",
+    "before": "/blog/assets/compass/put_bottles_into_dustbin-before.webp",
+    "after": "/blog/assets/compass/put_bottles_into_dustbin-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  },
+  {
+    "id": "organize_table",
+    "title": "Put the workspace in order",
+    "category": "Coordination",
+    "description": "Move each item to its designated place and clear the remaining objects.",
+    "plan": [
+      "Place the red mouse on the black mouse pad.",
+      "Push the white keyboard fully into the outlined frame.",
+      "Place the Iron Man figurine upright on its stand.",
+      "Place the alarm clock on top of the drawer.",
+      "Open the drawer.",
+      "Put the gray miscellaneous item inside the drawer."
+    ],
+    "summary": "Organize the desktop by placing each main item in its designated location, then clear away the leftover miscellaneous object. The mouse belongs on the mouse pad, the keyboard inside the marked frame, the figurine on the clear stand, the alarm clock on top of the drawer unit, and all remaining miscellaneous items inside the opened drawer.",
+    "goal_state": [
+      "on(red_mouse, black_mouse_pad)",
+      "inside_frame(white_keyboard, keyboard_frame)",
+      "on(iron_man_figurine, clear_figurine_stand)",
+      "upright(iron_man_figurine)",
+      "on(alarm_clock, drawer_unit)",
+      "open(drawer_unit)",
+      "inside(gray_misc_item, drawer_unit)",
+      "all_remaining_miscellaneous_items_inside(drawer_unit)"
+    ],
+    "checks": [
+      "on(red_mouse, black_mouse_pad)",
+      "inside_frame(white_keyboard, keyboard_frame)",
+      "on(iron_man_figurine, clear_figurine_stand)",
+      "on(alarm_clock, drawer_unit)",
+      "open(drawer_unit)",
+      "inside(gray_misc_item, drawer_unit)"
+    ],
+    "duration": 16.92,
+    "video": "/blog/assets/compass/organize_table.mp4",
+    "all_cameras": "/blog/assets/compass/organize_table-cameras.mp4",
+    "poster": "/blog/assets/compass/organize_table-poster.webp",
+    "before": "/blog/assets/compass/organize_table-before.webp",
+    "after": "/blog/assets/compass/organize_table-after.webp",
+    "source": "COMPASS t2v3 recorded execution",
+    "native_success": true
+  }
+]

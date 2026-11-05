@@ -7,7 +7,7 @@
 ## 内容
 
 - 11 个研究条目：Agentic Systems（5）、Multimodal Learning（1）、Time Series & Dynamics（3）、Technical Reports（2）。
-- RoboRSI 放入 Agentic Systems；SenseNova-U1.5 和 Mage-Flow 放入 Technical Reports。没有独立 Blog 栏目。
+- RoboRSI 放入 Agentic Systems；SenseNova-U1.5 和 Mage-Flow 放入 Technical Reports。Blog 栏目提供研究长文、case 视频与 Markdown 写作入口。
 - News 包含 RoboRSI、SenseNova-U1.5 及先前预印本动态。
 - Experience 根据本人 GitHub 历史 CV 资料填写，详见 `SOURCES.md`。
 - Community Contribution 包含 Argus、lmms-eval、lmms-engine 和 Flash Linear Attention。
@@ -39,3 +39,25 @@ GitHub Pages 从 `main` 分支根目录发布，无需额外构建。页面路�
 公开来源、媒体来源与经历出处记录在 `SOURCES.md`。缺少公开视频时使用官方配图；DANet、PI-GNN 的主题示意图不代表实验结果。未核实的 Code/Scholar 链接不伪造。
 
 原站所有视频和实验文件均保留，原首页归档为 `previous-homepage-20260911.html`。`preview/` 仅存本地预览截图，不参与发布。
+
+
+## Blog 写作
+
+访问 https://nssmd.github.io/blog/ 。COMPASS 文章位于 `/blog/compass/`。
+
+1. 复制 `content/blog/_template.md`，以日期和标题命名，例如 `2026-11-06-my-note.md`。
+2. 填写标题、slug、简介、日期和标签；正文用 Markdown，可加入图片、表格、代码和视频 HTML。
+3. 写好后设 `published: true`，推送到 `main`，GitHub Actions 自动构建并发布。`published: false` 和未来日期的文章不进入网站和 RSS。
+
+本地预览：
+
+```bash
+pip install Markdown==3.8.2 PyYAML==6.0.2 Pygments==2.19.2
+python build.py
+python tools/build_blog.py
+python -m http.server 8766
+```
+
+博客样式与交互位于 `blog/blog.css` 和 `blog/blog.js`。COMPASS 视频与精选执行数据位于 `blog/assets/compass/`；所有 case 来自 COMPASS 自身的 t2v3 运行，参考 RoboRSI 的展示结构，没有使用其视频作为 COMPASS 结果。
+
+发布现在由 `.github/workflows/pages.yml` 完成，沿用原静态文件和 `.nojekyll`，保留原站项目资源路径。
