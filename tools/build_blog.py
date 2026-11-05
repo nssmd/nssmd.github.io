@@ -2,7 +2,7 @@
 from pathlib import Path
 from html import escape as esc
 from datetime import datetime
-import json,re,math
+import json,re,math,hashlib
 import markdown,yaml
 from compass_components import components,DOC
 
@@ -11,13 +11,17 @@ ORIGIN='https://nssmd.github.io'
 BLOG=ROOT/'blog'
 
 def shell(title,description,url,body,kind='website',cover='/assets/avatar.png'):
+    def digest(name):
+        p=ROOT/name
+        return hashlib.sha256(p.read_bytes()).hexdigest()[:12] if p.exists() else 'initial'
+    css_version=digest('blog/blog.css');js_version=digest('blog/blog.js');trace_version=digest('blog/assets/compass/scenecode-traces.json');review_version=digest('blog/assets/compass/review-links.json')
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)} · Zimo Wen</title><meta name="description" content="{esc(description,quote=True)}">
 <link rel="canonical" href="{ORIGIN}{url}"><meta property="og:title" content="{esc(title,quote=True)}"><meta property="og:description" content="{esc(description,quote=True)}"><meta property="og:type" content="{kind}"><meta property="og:url" content="{ORIGIN}{url}"><meta property="og:image" content="{ORIGIN}{cover}"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/atom+xml" title="Zimo Wen — Blog" href="/blog/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/blog/blog.css"><script src="/blog/blog.js" defer></script></head>
+<meta name="compass-trace-version" content="{trace_version}"><meta name="compass-review-version" content="{review_version}"><link rel="stylesheet" href="/blog/blog.css?v={css_version}"><script src="/blog/blog.js?v={js_version}" defer></script></head>
 <body><a class="skip-link" href="#main">Skip to content</a><header class="site-header"><a class="wordmark" href="/">Zimo Wen<span class="wordmark-dot">.</span></a><nav aria-label="Main navigation"><a href="/">Home</a><a href="/#research">Research</a><a href="/blog/" aria-current="page">Blog</a><a class="rss-link" href="/blog/feed.xml" aria-label="Subscribe via RSS"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="5" cy="15" r="1" fill="currentColor"/><path d="M4 8a8 8 0 0 1 8 8M4 3a13 13 0 0 1 13 13"/></svg></a></nav></header>
 {body}<footer class="site-footer"><a href="/">Zimo Wen · @nssmd</a><span>Research, notes, and things in progress.</span><a href="#top">Back to top ↑</a></footer></body></html>'''
 

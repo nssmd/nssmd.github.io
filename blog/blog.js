@@ -75,7 +75,8 @@
     }
     frag.append(document.createTextNode(text.slice(pos)));el.replaceChildren(frag);
   }
-  fetch('/blog/assets/compass/scenecode-traces.json').then(r=>{if(!r.ok)throw new Error('timeline');return r.json()}).then(traces=>{
+  const traceVersion=document.querySelector('meta[name="compass-trace-version"]')?.content||'initial';
+  fetch('/blog/assets/compass/scenecode-traces.json?v='+traceVersion).then(r=>{if(!r.ok)throw new Error('timeline');return r.json()}).then(traces=>{
     players.forEach(player=>{
       const trace=traces[player.dataset.syncCase];if(!trace)return;
       const video=player.querySelector('video'), code=player.querySelector('.sync-code code'), svg=player.querySelector('.scene-anchors');
@@ -121,7 +122,8 @@
   const doc='https://docs.google.com/document/d/1H76U3hDNDe5E_JY4HZYSGUGbulYV-CGbZnrcT1s-fow/edit';
   const popup=document.querySelector('.selection-review'),toast=document.querySelector('.review-toast');if(!popup)return;
   let reviewLinks={},selectedQuote='',selectedAnchor='';
-  fetch('/blog/assets/compass/review-links.json').then(r=>r.ok?r.json():{}).then(d=>reviewLinks=d).catch(()=>{});
+  const reviewVersion=document.querySelector('meta[name="compass-review-version"]')?.content||'initial';
+  fetch('/blog/assets/compass/review-links.json?v='+reviewVersion).then(r=>r.ok?r.json():{}).then(d=>reviewLinks=d).catch(()=>{});
   function notify(message){toast.textContent=message;toast.classList.add('visible');setTimeout(()=>toast.classList.remove('visible'),4500)}
   function copy(text){if(navigator.clipboard?.writeText)return navigator.clipboard.writeText(text);return Promise.reject(new Error('Clipboard unavailable'))}
   function anchorFor(el){const study=el?.closest?.('[data-sync-case]');if(study)return study.id;let previous='';document.querySelectorAll('.article-body h2[id]').forEach(h=>{if(el&&(h===el||h.compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING))previous=h.id});return previous}
