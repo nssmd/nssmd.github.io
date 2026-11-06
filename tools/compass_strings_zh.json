@@ -359,5 +359,6 @@
 "Zimo Wen · @nssmd": "Zimo Wen · @nssmd",
 "Research, notes, and things in progress.": "研究、笔记，以及正在进行的事。",
 "Back to top ↑": "回到顶部 ↑",
-"Orange, yellow, red — the recorded execution, with the SceneCode the system actually produced at each review point shown alongside.": "橙、黄、红——任务执行的录像，右侧同步显示系统在每个检查点实际生成的 SceneCode。"
+"Orange, yellow, red — the recorded execution, with the SceneCode the system actually produced at each review point shown alongside.": "橙、黄、红——任务执行的录像，右侧同步显示系统在每个检查点实际生成的 SceneCode。",
+"A recorded run. Sol writes scene_code.py, SAM3 locates the objects, and π0.5 executes. The orange circle is the target the encoder steers toward. After each segment Sol checks the new frames and rewrites the code.": "一次真实运行的录像。Sol 写出 scene_code.py，SAM3 定位物体，π0.5 执行。橙色圈是 encoder 正在引导去的目标。每段执行结束后，Sol 看新画面，检查结果并改写代码。"
 }
