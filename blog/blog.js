@@ -1,4 +1,6 @@
 (() => {
+  const BASE = (document.querySelector('meta[name="compass-base"]') || {}).content || '';
+  const PAGE = BASE ? BASE + '/review/compass/' : location.origin + location.pathname;
   const search = document.querySelector('#post-search');
   if (search) search.addEventListener('input', () => {
     const query = search.value.toLowerCase().trim(); let count = 0;
@@ -76,7 +78,7 @@
     frag.append(document.createTextNode(text.slice(pos)));el.replaceChildren(frag);
   }
   const traceVersion=document.querySelector('meta[name="compass-trace-version"]')?.content||'initial';
-  fetch('/blog/assets/compass/scenecode-traces.json?v='+traceVersion).then(r=>{if(!r.ok)throw new Error('timeline');return r.json()}).then(traces=>{
+  fetch(BASE+'/blog/assets/compass/scenecode-traces.json?v='+traceVersion).then(r=>{if(!r.ok)throw new Error('timeline');return r.json()}).then(traces=>{
     players.forEach(player=>{
       const trace=traces[player.dataset.syncCase];if(!trace)return;
       const video=player.querySelector('video'), code=player.querySelector('.sync-code code'), svg=player.querySelector('.scene-anchors');
@@ -123,14 +125,14 @@
   const popup=document.querySelector('.selection-review'),toast=document.querySelector('.review-toast');if(!popup)return;
   let reviewLinks={},selectedQuote='',selectedAnchor='';
   const reviewVersion=document.querySelector('meta[name="compass-review-version"]')?.content||'initial';
-  fetch('/blog/assets/compass/review-links.json?v='+reviewVersion).then(r=>r.ok?r.json():{}).then(d=>reviewLinks=d).catch(()=>{});
+  fetch(BASE+'/blog/assets/compass/review-links.json?v='+reviewVersion).then(r=>r.ok?r.json():{}).then(d=>reviewLinks=d).catch(()=>{});
   function notify(message){toast.textContent=message;toast.classList.add('visible');setTimeout(()=>toast.classList.remove('visible'),4500)}
   function copy(text){if(navigator.clipboard?.writeText)return navigator.clipboard.writeText(text);return Promise.reject(new Error('Clipboard unavailable'))}
   function anchorFor(el){const study=el?.closest?.('[data-sync-case]');if(study)return study.id;let previous='';document.querySelectorAll('.article-body h2[id]').forEach(h=>{if(el&&(h===el||h.compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING))previous=h.id});return previous}
   function openContext(event,text,anchor){event.currentTarget.href=reviewLinks[anchor]||doc;copy(text).then(()=>notify('Context copied. Paste it into a comment in Google Doc.')).catch(()=>notify('Open the Doc and quote the passage you want to discuss.'))}
   document.querySelectorAll('[data-review-moment]').forEach(link=>link.addEventListener('click',event=>{
     const player=link.closest('[data-sync-case]'),video=player.querySelector('video'),state=player._recordedState;
-    const body=['COMPASS review',player.querySelector('h3').textContent,'Video time: '+video.currentTime.toFixed(2)+'s',location.origin+location.pathname+'#'+player.id,state?'Recorded SceneCode review: control step '+state.step:'',state?'Progress: '+state.progress:'','Comment: '].filter(Boolean).join('\n');
+    const body=['COMPASS review',player.querySelector('h3').textContent,'Video time: '+video.currentTime.toFixed(2)+'s',PAGE+'#'+player.id,state?'Recorded SceneCode review: control step '+state.step:'',state?'Progress: '+state.progress:'','Comment: '].filter(Boolean).join('\n');
     openContext(event,body,player.id);
   }));
   document.querySelector('[data-review-open]')?.addEventListener('click',event=>openContext(event,'COMPASS review\n'+location.href+'\n\nComment: ',location.hash.slice(1)));
@@ -140,6 +142,6 @@
     const rect=selection.getRangeAt(0).getBoundingClientRect();selectedQuote=text;selectedAnchor=anchorFor(el);popup.href=reviewLinks[selectedAnchor]||doc;popup.hidden=false;popup.style.left=Math.max(8,Math.min(rect.left,innerWidth-225))+'px';popup.style.top=Math.max(8,rect.top-44)+'px';
   });
   popup.addEventListener('pointerdown',e=>e.preventDefault());
-  popup.addEventListener('click',event=>{openContext(event,'COMPASS review\nSection: '+selectedAnchor+'\n'+location.origin+location.pathname+'#'+selectedAnchor+'\n\nQuote:\n'+selectedQuote+'\n\nComment: ',selectedAnchor);popup.hidden=true});
+  popup.addEventListener('click',event=>{openContext(event,'COMPASS review\nSection: '+selectedAnchor+'\n'+PAGE+'#'+selectedAnchor+'\n\nQuote:\n'+selectedQuote+'\n\nComment: ',selectedAnchor);popup.hidden=true});
   document.addEventListener('scroll',()=>popup.hidden=true,{passive:true});
 })();
