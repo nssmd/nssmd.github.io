@@ -52,7 +52,7 @@ GitHub Pages 从 `main` 分支根目录发布，无需额外构建。页面路�
 本地预览：
 
 ```bash
-pip install Markdown==3.8.2 PyYAML==6.0.2 Pygments==2.19.2
+pip install Markdown==3.8.2 PyYAML==6.0.2 Pygments==2.19.2 beautifulsoup4==4.13.4
 python build.py
 python tools/build_blog.py
 python -m http.server 8766
@@ -67,7 +67,7 @@ Blog 用于初步设想（Ideas）、论文解读（Paper notes）和研究随�
 
 ## COMPASS 方法文章与批注
 
-`/blog/compass/` 包含 SceneCode 字段说明、完整 pipeline、encoder 网络与训练机制、三个同步 case study 和 11 类执行视频。三个播放器使用控制步与视频帧的一一对应关系，在记录的 review 时间更新 SceneCode；可切换场景代码、命令、检查和 3D 目标，也可打开已经将代码渲染在旁边的 MP4。
+交互评审副本 `/review/compass/` 包含 SceneCode 字段说明、完整 pipeline、encoder 网络与训练机制、三个同步 case study 和 11 类执行视频。三个播放器使用控制步与视频帧的一一对应关系，在记录的 review 时间更新 SceneCode；可切换场景代码、命令、检查和 3D 目标，也可打开已经将代码渲染在旁边的 MP4。
 
 - 页面组件：`tools/compass_components.py`。
 - 记录数据：`blog/assets/compass/scenecode-traces.json`。
@@ -76,3 +76,10 @@ Blog 用于初步设想（Ideas）、论文解读（Paper notes）和研究随�
 - Google Doc 使用正文结构，没有附录；普通共享访问者可批注，账号所有者保留编辑权限。
 
 公共页面只包含展示所需的 SceneCode 数据，不包含 API 响应身份、认证信息或原始内部日志。
+
+
+## 两个展示版本
+
+- 官网 `/blog/compass/` 是静态文章：关键帧与 SceneCode 摘录顺序展示，视频使用普通链接。公开 Blog 不包含播放器、筛选、弹窗或选文批注脚本。
+- `/review/compass/` 是给老师的交互评审副本：保留同步视频、SceneCode 切换、时间轴和 Google Doc 批注上下文复制。该路径不进入 Blog 列表或 RSS，并标记 noindex；它是通过链接访问的评审副本，不是访问受限页面。
+- Google Colab 保存交互页面的预览输出，可通过 Google 分享与评论；原 Google Doc 专门记录实验结果、token 实测和后续资源。

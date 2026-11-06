@@ -5,6 +5,7 @@ from datetime import datetime
 import json,re,math,hashlib
 import markdown,yaml
 from compass_components import components,DOC
+from static_article import make_static,static_index
 
 ROOT=Path(__file__).resolve().parents[1]
 ORIGIN='https://nssmd.github.io'
@@ -74,13 +75,19 @@ def build():
             hero=f'<figure class="hero-film"><video controls muted loop playsinline preload="metadata" poster="{cover}" aria-label="{esc(title,quote=True)}"><source src="{post["hero_video"]}" type="video/mp4"></video><figcaption>{esc(post.get("hero_caption",""))}</figcaption></figure>'
         schema=json.dumps({'@context':'https://schema.org','@type':'BlogPosting','headline':title,'description':description,'datePublished':post['date'],'author':{'@type':'Person','name':'Zimo Wen','url':ORIGIN},'image':ORIGIN+cover,'mainEntityOfPage':ORIGIN+url}).replace('<','\\u003c')
         content=f'''<main id="main"><article id="top"><header class="article-hero"><div class="eyebrow">{esc(post.get('category','Notes'))}<span>·</span><time datetime="{post['date']}">{date}</time></div><h1>{esc(wordmark)}</h1><p class="hero-subtitle">{esc(subtitle)}</p><p class="hero-description">{esc(description)}</p><div class="hero-actions">{actions}</div></header>{hero}<div class="article-layout"><aside class="article-toc" aria-label="On this page"><span class="mini-label">IN THIS ARTICLE</span>{post['toc']}<a href="/blog/" class="back-link">← All writing</a></aside><div class="article-body">{post['html']}</div></div><section class="article-end"><span class="mini-label">KEEP EXPLORING</span><h2>More from the notebook.</h2><a href="/blog/" class="pill-button">All writing ↗</a></section></article></main><script type="application/ld+json">{schema}</script><dialog id="camera-dialog"><button class="dialog-close" aria-label="Close video">×</button><h2></h2><video controls playsinline></video></dialog>'''
-        out=BLOG/post['slug'];out.mkdir(exist_ok=True);(out/'index.html').write_text(shell(title,description,url,content,'article',cover))
+        out=BLOG/post['slug'];out.mkdir(exist_ok=True);page=shell(title,description,url,content,'article',cover)
+        if post['slug']=='compass':
+            review=ROOT/'review/compass';review.mkdir(parents=True,exist_ok=True)
+            review_page=page.replace(f'<link rel="canonical" href="{ORIGIN}{url}">',f'<meta name="robots" content="noindex"><link rel="canonical" href="{ORIGIN}/review/compass/">')
+            review_page=review_page.replace('<title>','<title>Interactive review — ',1)
+            (review/'index.html').write_text(review_page)
+        (out/'index.html').write_text(make_static(page,ROOT))
     cards=[]
     for i,p in enumerate(posts):
         tags=''.join('<span>'+esc(t)+'</span>' for t in p.get('tags',[]))
         cards.append(f'''<article class="post-card{' featured-post' if i==0 else ''}" data-search="{esc((p['title']+' '+p['description']+' '+' '.join(p.get('tags',[]))).lower(),quote=True)}"><a class="post-image" href="{p['url']}"><img src="{p.get('cover','/assets/avatar.png')}" alt="{esc(p.get('cover_alt',p['title']),quote=True)}" width="960" height="540"><span class="image-label">RESEARCH NOTE</span></a><div class="post-copy"><div class="eyebrow">{esc(p.get('category','Notes'))}<span>·</span>{p['date']}</div><h2><a href="{p['url']}">{esc(p['title'])}</a></h2><p>{esc(p['description'])}</p><div class="post-tags">{tags}</div><a class="read-post" href="{p['url']}">Read the story <span>↗</span></a></div></article>''')
     body=f'''<main id="main" class="journal" tabindex="-1"><section class="journal-hero" id="top"><div class="eyebrow">THE NOTEBOOK <span> / </span> ZIMO WEN</div><h1>Research.<br>Notes.<br><em>Things in progress.</em></h1><p>Early ideas, paper notes, and reflections on research.</p><div class="journal-topics"><span>Ideas</span><span>Paper notes</span><span>Reflections</span></div><div class="journal-mark" aria-hidden="true"><span>n</span><i>01 / ∞</i></div></section><section class="writing-section" aria-labelledby="writing-heading"><div class="writing-heading"><h2 id="writing-heading">Latest writing <span>{len(posts):02}</span></h2><label class="journal-search"><span class="sr-only">Search articles</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></svg><input id="post-search" type="search" placeholder="Find an idea or note…" autocomplete="off"></label></div><div class="post-list">{''.join(cards)}</div><p class="empty-search" id="post-empty" hidden>No matching notes. Try another keyword.</p><p class="sr-only" id="post-status" role="status" aria-live="polite"></p></section><section class="journal-signoff"><p>Good ideas tend to start<br>as a note to yourself.</p><a href="/blog/feed.xml">Follow the notebook <span>↗</span></a></section></main>'''
-    (BLOG/'index.html').write_text(shell('Blog','Research notes and experiments by Zimo Wen.','/blog/',body,cover=posts[0].get('cover','/assets/avatar.png') if posts else '/assets/avatar.png'))
+    (BLOG/'index.html').write_text(static_index(shell('Blog','Research notes and experiments by Zimo Wen.','/blog/',body,cover=posts[0].get('cover','/assets/avatar.png') if posts else '/assets/avatar.png')))
     updated=posts[0]['date']+'T00:00:00Z' if posts else datetime.now().strftime('%Y-%m-%dT00:00:00Z')
     entries=''.join(f'<entry><title>{esc(p["title"])}</title><id>{ORIGIN}{p["url"]}</id><link href="{ORIGIN}{p["url"]}"/><updated>{p["date"]}T00:00:00Z</updated><summary>{esc(p["description"])}</summary></entry>' for p in posts)
     (BLOG/'feed.xml').write_text(f'<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><title>Zimo Wen — Blog</title><id>{ORIGIN}/blog/</id><link href="{ORIGIN}/blog/feed.xml" rel="self"/><link href="{ORIGIN}/blog/"/><updated>{updated}</updated><author><name>Zimo Wen</name></author>{entries}</feed>')

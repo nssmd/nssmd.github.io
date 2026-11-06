@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install Markdown==3.8.2 PyYAML==6.0.2 Pygments==2.19.2
+      - run: pip install Markdown==3.8.2 PyYAML==6.0.2 Pygments==2.19.2 beautifulsoup4==4.13.4
       - run: python build.py
       - run: python tools/build_blog.py
       - name: Prepare static site
