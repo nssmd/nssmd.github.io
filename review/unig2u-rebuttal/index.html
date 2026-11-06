@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ICLR 2027 #14840 UniG2U-Bench · 审稿意见、回复与补充实验</title>
+<style>
+:root{--fg:#1d1d1f;--mut:#666;--line:#e3e3e8;--bg:#fafafa;--acc:#2456c9;--warn:#b45309}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15.5px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:40px 20px 80px}
+h1{font-size:26px;line-height:1.35;margin:0 0 6px}
+.sub{color:var(--mut);margin:0 0 24px}
+nav.toc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin-bottom:28px}
+nav.toc a{color:var(--acc);text-decoration:none;margin-right:18px;white-space:nowrap}
+h2{font-size:21px;margin:44px 0 6px;padding-top:8px;border-top:2px solid var(--fg)}
+.meta{color:var(--mut);font-size:14px;margin-bottom:14px}
+.item{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:16px 0}
+.item h3{font-size:16.5px;margin:0 0 10px}
+.lab{display:inline-block;font-size:12.5px;font-weight:600;padding:1px 9px;border-radius:999px;margin:10px 0 4px}
+.l1{background:#eef1f6;color:#3a4a66}.l2{background:#e8f3ec;color:#1f6b3a}.l3{background:#fdf1e3;color:#8a4b0f}
+blockquote{margin:4px 0;padding:6px 14px;border-left:3px solid #c9ced8;color:#3b3b3f;background:#f6f7f9;border-radius:0 6px 6px 0}
+.resp{margin:4px 0;padding:8px 14px;border-left:3px solid #4a9a66;background:#f5faf6;border-radius:0 6px 6px 0}
+.resp p{margin:6px 0}
+.exp{margin:4px 0 0 0;padding-left:22px}
+.exp li{margin:3px 0}
+.tbd{background:#fff3c4;color:var(--warn);padding:0 4px;border-radius:3px;font-weight:600;white-space:nowrap}
+.note{font-size:13.5px;color:var(--mut)}
+table{border-collapse:collapse;width:100%;background:#fff;font-size:14.5px;margin-top:10px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f1f2f5}
+.scores{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
+.scores span{background:#fff;border:1px solid var(--line);border-radius:6px;padding:2px 10px;font-size:13.5px}
+</style></head>
+</head>
+<body><main>
+<h1>UniG2U-Bench（ICLR 2027 投稿 #14840）<br>审稿意见、建议回复与需要补充的实验</h1>
+<p class="sub">整理日期 2026-11-06。回复草稿为英文，可直接用于 OpenReview；<span class="tbd">[待填]</span> 是补完实验或核对后才能填的内容，未填之前不要提交。</p>
+
+<nav class="toc"><a href="#abyh">审稿人 AbYh（2 分）</a><a href="#shgy">审稿人 sHgY（3 分）</a><a href="#3yav">审稿人 3yav（2 分）</a><a href="#exps">需要补充的实验汇总</a></nav>
+
+<p><b>三位审稿人共同的问题：</b>“先生成后回答”（GtA）和“直接回答”（Direct）之间，除了是否生成图像，还差在推理步数、提示词和预算上，所以分不出视觉生成本身的贡献。三位都要求写清“匹配的推理预算”，sHgY 和 3yav 都要求在相同预算、相同任务说明下和纯文本推理（CoT）比较。这一组实验最关键，sHgY 明确说做好了会提分。</p>
+
+<!-- ====================== AbYh ====================== -->
+<h2 id="abyh">审稿人 AbYh</h2>
+<div class="meta">评分 2：弱拒绝 · 信心 3</div>
+<div class="scores"><span>表达 3：清晰易懂</span><span>信息量 2</span><span>可靠性 2：有一些轻微或可解决的担忧</span></div>
+<p><b>认可的点：</b>研究问题相关，基准覆盖的模型和任务广；成对比较和两种推理方式的设计有诊断价值，也承认了剩余的混杂因素；控制基线的相关性分析和参考中间图实验让实证部分不只是比总分。</p>
+
+<div class="item">
+<h3>W1 · 和 RealUnify、ROVER 的区别不够</h3>
+<span class="lab l1">审稿意见</span>
+<blockquote>RealUnify 已经对直接评估和先生成后理解的评估方法进行了比较，并报告了评估结果的下降，而 ROVER 则明确地评估了视觉增强型应答。因此，第 2 节中所做的区分缺乏充分的依据。</blockquote>
+<span class="lab l2">建议回复</span>
+<div class="resp">
+<p>We thank the reviewer and will revise Section 2 to position our work precisely against RealUnify and ROVER. We acknowledge that RealUnify compares direct and generate-then-understand evaluation and that ROVER evaluates visually augmented answering. Our benchmark differs in <span class="tbd">[按论文实际核对，以下为候选]</span>: (1) <b>two separate questions</b>: we separate the effect of unified training (unified model vs. its paired understanding model under Direct) from the effect of explicit inference-time generation (GtA vs. Direct within the same model), which prior benchmarks do not disentangle; (2) <b>paired comparators</b> for <span class="tbd">[N]</span> unified models, enabling within-family comparisons; (3) <b>diagnostic controls</b>: reference-intermediate interventions (App. N), baseline-residualized correlation analysis (App. D), and a likelihood-based commitment analysis; (4) <b>coverage</b>: <span class="tbd">[任务和模型数量和这两篇对比]</span>. We will add a comparison table (benchmark × these dimensions) to Section 2.</p>
+</div>
+<span class="lab l3">需要补充的实验</span>
+<ul class="exp">
+<li>不需要新跑。仔细读 RealUnify 和 ROVER，列一张对比表（两个问题是否分开、有没有成对比较对象、有没有参考中间图干预、任务和模型规模、预算是否控制）。</li>
+<li>可选：如果三个基准有共同评测的模型，报告这些模型在三个基准上结论是否一致，说明我们的基准提供了新信息。</li>
+</ul>
+</div>
+
+<div class="item">
+<h3>W2 · 没说清生成什么时候有用</h3>
+<span class="lab l1">审稿意见</span>
+<blockquote>表 14 中所示的对比结果，例如 BAGEL 的性能提升与 Ovis-U1 性能下降，并不能充分解释转换密集型任务所提出的益处。该研究尚未明确生成何时能够发挥作用。</blockquote>
+<span class="lab l2">建议回复</span>
+<div class="resp">
+<p>We agree that a contrast between two models is not enough to explain when generation helps. We added an analysis that relates the GtA–Direct gain to measurable factors across all <span class="tbd">[N]</span> applicable models and all subtasks: (i) the quality / correctness of the generated intermediate image (<span class="tbd">[自动打分方法或人工标注]</span>), (ii) whether the task requires tracking an explicit state change, and (iii) the model's Direct accuracy. GtA helps when <span class="tbd">[按结果填写，例如中间图正确率高于 X% 且任务需要状态追踪]</span>; when intermediates are incorrect, GtA hurts by <span class="tbd">[X]</span> pp on average. With verified reference intermediates (App. N), the gain on transformation-heavy tasks becomes <span class="tbd">[X]</span> pp, showing that the benefit is limited by generation quality rather than by the use of intermediates. The BAGEL vs. Ovis-U1 difference is explained by <span class="tbd">[如两者中间图质量差异 X vs. Y]</span>.</p>
+</div>
+<span class="lab l3">需要补充的实验</span>
+<ul class="exp">
+<li>给 GtA 生成的中间图打分（正确性或质量；自动评测加一部分人工核对）。</li>
+<li>按模型 × 子任务，把 GtA 相对 Direct 的提升和中间图质量、任务类型、Direct 准确率做回归或分组分析，总结出“生成有用”的条件。</li>
+<li>把参考中间图的干预实验扩展到更多模型和变换密集型任务，专门解释 BAGEL 和 Ovis-U1 的差别。</li>
+<li>和 sHgY 的“中间图质量和性能变化的关系”是同一个实验。</li>
+</ul>
+</div>
+
+<div class="item">
+<h3>Q · “匹配的推理预算”具体指什么</h3>
+<span class="lab l1">审稿意见</span>
+<blockquote>作者能否解释一下第 4.2 节和第 5.2 节中“匹配的推理预算”是什么意思？请具体说明标记限制，以及这些限制是适用于每次调用还是整个流程；图像生成和重新编码的成本是如何计算的；以及迭代 GtA 任务的最大轮数和停止规则。</blockquote>
+<span class="lab l2">建议回复</span>
+<div class="resp">
+<p>We will add a budget table (new Table <span class="tbd">[X]</span>) for every model and protocol. Concretely: the text token limit is <span class="tbd">[X]</span> tokens <span class="tbd">[per call / per pipeline]</span>; each generated image counts as <span class="tbd">[X]</span> tokens <span class="tbd">[按实际：生成 token 数 / 重新编码进上下文的视觉 token 数]</span>; iterative GtA runs at most <span class="tbd">[X]</span> rounds and stops when <span class="tbd">[停止规则]</span>. We also report the <i>measured</i> average text tokens, number of images, and rounds actually used per model and protocol, so that the budgets can be compared directly.</p>
+</div>
+<span class="lab l3">需要补充的实验</span>
+<ul class="exp">
+<li>从代码和日志核对实际设置：文本 token 上限、是每次调用还是整个流程、图像怎么计成本、迭代 GtA 的最大轮数和停止规则。</li>
+<li>从日志统计每个模型、每种推理方式实际用掉的文本 token、图像数、轮数，做成表。和 3yav 的预算问题合并。</li>
+</ul>
+</div>
+
+<!-- ====================== sHgY ====================== -->
+<h2 id="shgy">审稿人 sHgY</h2>
+<div class="meta">评分 3：倾向接收（原文为 3：接受度低）· 信心 4 · 明确表示问题解决后会考虑提分</div>
+<div class="scores"><span>表达 3：清晰易懂</span><span>信息量 3</span><span>可靠性 3：对可靠性没有实质性担忧</span></div>
+<p><b>认可的点：</b>研究问题有启发性，直接问“生成能不能帮助理解”，并区分统一训练和显式中间图生成两种效果；实证分析全面，既发现融合后理解能力可能下降，也找到生成有明显优势的任务；跨任务和模型族的相关性分析有价值。</p>
+
+<div class="item">
+<h3>W1 · 机制解释没有直接验证</h3>
+<span class="lab l1">审稿意见</span>
+<blockquote>所提出的机制解释缺乏充分验证。该论文使用梯度对齐和中间视觉状态来解释观察到的性能差异，但关键的理论量并未直接测量。<br>问题（后半）：……并进一步研究梯度对齐或中间视觉质量与性能变化之间的关系？</blockquote>
+<span class="lab l2">建议回复</span>
+<div class="resp">
+<p>We agree that the theoretical quantities should be measured directly. We added two measurements:</p>
+<p>(1) <b>Gradient alignment.</b> For <span class="tbd">[N]</span> open-weight unified models, we compute the cosine similarity between the gradients of the generation loss and the understanding loss on <span class="tbd">[X]</span> samples per category <span class="tbd">[在共享参数上 / 指定层上]</span>. Categories with higher alignment show a larger unified-vs-comparator gain (Spearman ρ = <span class="tbd">[X]</span>, p = <span class="tbd">[X]</span>).</p>
+<p>(2) <b>Intermediate visual quality.</b> We score each generated intermediate <span class="tbd">[方法]</span> and find that the GtA–Direct gain increases with intermediate quality (ρ = <span class="tbd">[X]</span>); with verified reference intermediates the gain rises to <span class="tbd">[X]</span> pp.</p>
+<p>If some quantities cannot be measured for closed or unavailable training data, we will state this explicitly and present the corresponding part of the analysis as a hypothesis rather than an explanation.</p>
+</div>
+<span class="lab l3">需要补充的实验</span>
+<ul class="exp">
+<li>在能拿到权重的统一模型上，直接测生成损失和理解损失的梯度余弦相似度（按任务类别），和统一模型相对比较对象的性能差做相关分析。</li>
+<li>中间图质量和 GtA 提升的相关分析（和 AbYh W2 合并）。</li>
+<li>测不了的部分在论文里改口径，标成假设。</li>
+</ul>
+</div>
+
+<div class="item">
+<h3>W2 / Q · 在相同推理预算下和纯文本 CoT 比较</h3>
+<span class="lab l1">审稿意见</span>
+<blockquote>“生成后回答”和“直接推理”的区别不仅在于是否生成中间图像，还在于它们额外的推理步骤和特定任务的提示。如果没有在匹配的推理预算下与纯文本 CoT 进行系统比较，视觉生成的独立贡献仍然不明确。<br>问题：作者能否在相同的推理预算下，将“生成后回答”算法与纯文本 CoT 算法进行比较……此类实验有助于区分视觉生成本身的贡献与额外推理计算带来的收益。</blockquote>
+<span class="lab l2">建议回复</span>
+<div class="resp">
+<p>We thank the reviewer for this suggestion, which we agree is the key control. We added a <b>text-only CoT</b> condition for all <span class="tbd">[N]</span> GtA-capable models. It uses the same task instructions and step structure as GtA, but the model describes the intermediate state in text instead of generating an image, under the same total budget (<span class="tbd">[X]</span> tokens, with each image counted as <span class="tbd">[X]</span> tokens). This yields a three-way decomposition (new Table <span class="tbd">[X]</span>):</p>
+<p>Direct → Text-CoT measures the gain from extra reasoning: <span class="tbd">[X]</span> pp; Text-CoT → GtA measures the gain from visual generation itself: <span class="tbd">[X]</span> pp overall, and <span class="tbd">[X]</span> pp on spatial / transformation-heavy tasks. <span class="tbd">[按结果写结论：例如视觉生成本身的优势只在空间和变换类任务上保持]</span>. We report paired bootstrap 95% confidence intervals for all differences.</p>
+</div>
+<span class="lab l3">需要补充的实验</span>
+<ul class="exp">
+<li>新增纯文本 CoT 条件：任务说明、步骤结构和 GtA 一致，只是把“生成中间图”换成“用文字描述中间状态”；总预算和 GtA 对齐。</li>
+<li>在所有支持 GtA 的模型、所有子任务上跑 Direct / 纯文本 CoT / GtA 三组，按类别报告差值和成对置信区间。</li>
+<li>可选：再加一个“文字 CoT 的预算放宽到和 GtA 实际消耗相同”的条件，排除预算不对等。</li>
+</ul>
+</div>
+
+<!-- ====================== 3yav ====================== -->
+<h2 id="3yav">审稿人 3yav</h2>
+<div class="meta">评分 2：弱拒绝 · 信心 3</div>
+<div class="scores"><span>表达 3：清晰易懂</span><span>信息量 3</span><span>可靠性 3：对可靠性没有实质性担忧</span></div>
+<p><b>认可的点：</b>区分了常被混为一谈的两个问题（统一训练带来的改进和推理时生成中间图带来的改进）；任务层面的结果比单一汇总更有信息量；附录 D 的残差化控制、附录 N 的人工核对参考中间图、单独分析不支持的编辑协议，都让实证研究更扎实。</p>
+
+<div class="item">
+<h3>W1 / Q1 · 比较对象和配对依据不一致</h3>
+<span class="lab l1">审稿意见</span>
+<blockquote>表 2 将 OneCAT-3B 与 Qwen2.5-VL-7B 进行比较，而 OneCAT 的原始论文却将 Qwen2.5-3B-Instruct 列为其语言模型初始化模型……使用已评估过的 Qwen2.5-VL-3B 作为替代模型，可以将报告的 Direct 缺陷从 -3.30 变为 -1.24，尽管其符号仍然为负。<br>表 2 和表 13 之间也存在类似的歧义：对于 BAGEL，表 13 列出了 Qwen-2.5，而表 2 使用的是 LLaVA-OneVision；对于 Ovis-U1，表 13 列出了 Qwen3-1.7B，而表 2 使用的是 Qwen2.5-VL-3B。<br>问题：请提供一份详细的检查点和配对表，分别列明每个模型的语言初始化、视觉组件、选定的理解比较器以及匹配依据。另请说明标记为 LLaDA-Instruct 的检查点如何处理视觉输入，以及相关性分析中如何定义骨架家族。在匹配度最高的子集上，主要结论有何变化？</blockquote>
+<span class="lab l2">建议回复</span>
+<div class="resp">
+<p>We thank the reviewer for the careful check. We will add a full checkpoint and pairing table (new Table <span class="tbd">[X]</span>) listing, for every unified model: the language-model initialization, the vision encoder / tokenizer, the selected understanding comparator, and the matching rationale (<i>same LLM initialization</i>, <i>same released VLM base</i>, or <i>proxy of closest size and family</i>). Table 13 lists LLM initializations, while Table 2 lists the multimodal comparators; we will rename the columns to make this distinction explicit and fix <span class="tbd">[核对后列出确实写错的条目]</span>.</p>
+<p>For OneCAT-3B, we agree that Qwen2.5-VL-3B is the closer comparator; we now use it, and the Direct deficit becomes −1.24 (still negative). On the best-matched subset (<span class="tbd">[N]</span> models whose comparator shares the LLM initialization), <span class="tbd">[X]</span> of <span class="tbd">[N]</span> unified models underperform their comparator under Direct, with a mean difference of <span class="tbd">[X]</span> pp (95% CI <span class="tbd">[X, X]</span>), so the main conclusion <span class="tbd">[holds / is weakened to ...]</span>.</p>
+<p>The checkpoint labeled LLaDA-Instruct <span class="tbd">[核对：实际是哪个多模态版本，视觉输入怎么进入；如果是纯文本模型被误标，说明并修正]</span>. Backbone families in the correlation analysis are defined by <span class="tbd">[LLM 初始化的模型族]</span>; the full assignment is in the new table.</p>
+</div>
+<span class="lab l3">需要补充的实验</span>
+<ul class="exp">
+<li>逐个模型核对原始论文和权重：语言初始化、视觉组件、所选比较对象、配对依据，做成完整配对表；修正表 2 和表 13 的列名和错误条目。</li>
+<li>OneCAT-3B 改用 Qwen2.5-VL-3B 作为比较对象（数字已在审稿意见里给出，需复核）；其他配对不够紧的模型也换成更接近的比较对象。</li>
+<li>只在“比较对象和统一模型语言初始化相同”的最匹配子集上重算主要结论（Direct 下多少个模型变差、平均差值、置信区间），并重跑相关性分析。</li>
+<li>核对 LLaDA-Instruct 检查点怎么处理视觉输入；写清相关性分析里的“骨架家族”定义。</li>
+</ul>
+</div>
+
+<div class="item">
+<h3>W2 / Q2 · Direct 和 GtA 实际用的提示词</h3>
+<span class="lab l1">审稿意见</span>
+<blockquote>附录 K 被标记为非 CoT，但 K.4 要求生成多个图像，并且与 L.10 中的视觉 CoT 提示基本重复。K.1.2 中的 Direct 物体运动提示使用相机运动框架，而 L.1.4 使用物体运动框架。Direct 和 GtA 的 MSR 提示在是否明确要求进行多步骤空间推理方面也存在差异……<br>问题：Direct 和 GtA 实际执行了哪些提示？请解决附录 K.4 中生成的图像请求以及附录 K 和 L 中物体运动和 MSR 的差异。这些仅仅是文档问题，还是需要修正已报告的实验结果？</blockquote>
+<span class="lab l2">建议回复</span>
+<div class="resp">
+<p>We thank the reviewer for the careful reading. We audited the prompts against the evaluation code and logs. <span class="tbd">[二选一，按核对结果写]</span></p>
+<p><i>If documentation only:</i> K.4 and the K.1.2 object-motion prompt in the appendix were copied incorrectly; the executed Direct prompts are <span class="tbd">[...]</span>, which do not request image generation and use the object-motion framing. We release the exact executed prompts and correct Appendices K and L.</p>
+<p><i>If executed:</i> we re-ran the affected subtasks (<span class="tbd">[列出]</span>) with unified prompts that differ only in whether an intermediate image is generated. The corrected results are <span class="tbd">[X]</span> (change of <span class="tbd">[X]</span> pp), and the main conclusions <span class="tbd">[hold / change as follows]</span>.</p>
+<p>For MSR, we now use the same instruction (including the explicit multi-step spatial reasoning request) for Direct, Text-CoT, and GtA, so that the conditions differ only in the intermediate modality.</p>
+</div>
+<span class="lab l3">需要补充的实验</span>
+<ul class="exp">
+<li>用代码和日志核对 Direct、GtA 每个子任务实际发出的提示词，特别是 K.4、K.1.2 和 L.1.4、MSR。</li>
+<li>如果确实执行了不一致的提示词：统一提示词（两种方式只差“是否生成中间图”），重跑受影响的子任务并更新主表。</li>
+<li>即使只是文档错误，也建议 MSR 等任务用统一说明重跑一遍，和纯文本 CoT 实验共用同一套提示词。</li>
+<li>公开实际执行的提示词。</li>
+</ul>
+</div>
+
+<div class="item">
+<h3>Q3 · 实际预算、相同说明下的纯文本推理、成对不确定性</h3>
+<span class="lab l1">审稿意见</span>
+<blockquote>请报告两种方案的实际文本、图像和交互预算。对于 GtA 方案改变推理框架并添加图像的任务，在与使用相同任务说明和明确预算的纯文本推理条件进行比较后，主要结论是否仍然成立？这些比较的成对不确定性将有助于确定所报告效果的稳定性。</blockquote>
+<span class="lab l2">建议回复</span>
+<div class="resp">
+<p>We now report measured budgets per model and protocol (text tokens, number of generated images, interaction rounds; new Table <span class="tbd">[X]</span>, see also our response to AbYh). We added a text-only reasoning condition with the same task instructions and an explicit matched budget (see our response to sHgY). Under this control, <span class="tbd">[结论]</span>. All Direct / Text-CoT / GtA and unified / comparator differences are now reported with paired bootstrap 95% CIs over items <span class="tbd">[以及 McNemar 检验]</span>; <span class="tbd">[X]</span> of <span class="tbd">[X]</span> reported effects remain significant.</p>
+</div>
+<span class="lab l3">需要补充的实验</span>
+<ul class="exp">
+<li>实际预算表（和 AbYh 的问题合并）。</li>
+<li>相同任务说明、明确预算的纯文本推理条件（和 sHgY 的 CoT 实验合并）。</li>
+<li>对所有成对比较（统一模型 vs 比较对象；Direct / 纯文本 CoT / GtA 两两之间）按样本做成对 bootstrap 置信区间或 McNemar 检验。</li>
+</ul>
+</div>
+
+<!-- ====================== 汇总 ====================== -->
+<h2 id="exps">需要补充的实验汇总</h2>
+<p class="note">同一个实验能回答多条意见的已经合并。</p>
+<table>
+<tr><th>#</th><th>实验</th><th>回应</th><th>是否要新跑</th></tr>
+<tr><td>1</td><td>纯文本 CoT 条件：任务说明和步骤与 GtA 一致，只把中间图换成文字描述，总预算对齐；所有支持 GtA 的模型上跑 Direct / 纯文本 CoT / GtA 三组</td><td>sHgY W2 / Q；3yav Q3；AbYh Q</td><td>是</td></tr>
+<tr><td>2</td><td>提示词核对：Direct、GtA 实际执行的提示词（K.4、K.1.2 / L.1.4、MSR）；有问题就统一提示词重跑受影响子任务，并公开提示词</td><td>3yav W2 / Q2</td><td>核对，视结果重跑</td></tr>
+<tr><td>3</td><td>预算表：文本 token 上限（每次调用还是整个流程）、图像成本怎么算、迭代 GtA 最大轮数和停止规则；以及每个模型实际消耗</td><td>AbYh Q；3yav Q3；sHgY</td><td>否，查代码和日志</td></tr>
+<tr><td>4</td><td>完整配对表：语言初始化、视觉组件、比较对象、配对依据；修正表 2 / 表 13；OneCAT-3B 改用 Qwen2.5-VL-3B；核对 LLaDA-Instruct；定义骨架家族</td><td>3yav W1 / Q1</td><td>核对，少量重算</td></tr>
+<tr><td>5</td><td>最匹配子集上重算主要结论和相关性分析</td><td>3yav Q1</td><td>否，重新统计</td></tr>
+<tr><td>6</td><td>成对不确定性：所有成对比较的 bootstrap 置信区间 / McNemar 检验</td><td>3yav Q3</td><td>否，重新统计</td></tr>
+<tr><td>7</td><td>直接测梯度对齐：能拿到权重的统一模型上，按类别算生成损失和理解损失梯度的余弦相似度，和性能差做相关</td><td>sHgY W1 / Q</td><td>是</td></tr>
+<tr><td>8</td><td>中间图质量：给 GtA 中间图打分，和 GtA 提升做相关 / 回归，总结“生成有用”的条件；扩展参考中间图干预，解释 BAGEL 与 Ovis-U1 的差别</td><td>AbYh W2；sHgY W1 / Q</td><td>是</td></tr>
+<tr><td>9</td><td>和 RealUnify、ROVER 的对比表，重写第 2 节；可选：共同模型在三个基准上的结论是否一致</td><td>AbYh W1</td><td>否，写作</td></tr>
+</table>
+</main></body></html>
