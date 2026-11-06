@@ -77,10 +77,8 @@ def build():
         content=f'''<main id="main"><article id="top"><header class="article-hero"><div class="eyebrow">{esc(post.get('category','Notes'))}<span>·</span><time datetime="{post['date']}">{date}</time></div><h1>{esc(wordmark)}</h1><p class="hero-subtitle">{esc(subtitle)}</p><p class="hero-description">{esc(description)}</p><div class="hero-actions">{actions}</div></header>{hero}<div class="article-layout"><aside class="article-toc" aria-label="On this page"><span class="mini-label">IN THIS ARTICLE</span>{post['toc']}<a href="/blog/" class="back-link">← All writing</a></aside><div class="article-body">{post['html']}</div></div><section class="article-end"><span class="mini-label">KEEP EXPLORING</span><h2>More from the notebook.</h2><a href="/blog/" class="pill-button">All writing ↗</a></section></article></main><script type="application/ld+json">{schema}</script><dialog id="camera-dialog"><button class="dialog-close" aria-label="Close video">×</button><h2></h2><video controls playsinline></video></dialog>'''
         out=BLOG/post['slug'];out.mkdir(exist_ok=True);page=shell(title,description,url,content,'article',cover)
         if post['slug']=='compass':
-            review=ROOT/'review/compass';review.mkdir(parents=True,exist_ok=True)
-            review_page=page.replace(f'<link rel="canonical" href="{ORIGIN}{url}">',f'<meta name="robots" content="noindex"><link rel="canonical" href="{ORIGIN}/review/compass/">')
-            review_page=review_page.replace('<title>','<title>Interactive review — ',1)
-            (review/'index.html').write_text(review_page)
+            from review_page import write_review
+            write_review(ROOT,page,ORIGIN,url)
         (out/'index.html').write_text(make_static(page,ROOT))
     cards=[]
     for i,p in enumerate(posts):
