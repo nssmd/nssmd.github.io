@@ -22,6 +22,8 @@ def strip_site(page):
     page = re.sub(r'<section class="article-end">.*?</section>', '', page, count=1, flags=re.S)
     page = re.sub(r'<a href="/blog/" class="back-link">.*?</a>', '', page, flags=re.S)
     page = re.sub(r'<link rel="alternate"[^>]*>', '', page)
+    # no code link in the review copy
+    page = re.sub(r'<a href="https://github\.com/[^"]*">[^<]*</a>(\s*&nbsp;\s*·\s*&nbsp;\s*)?', '', page)
     # any remaining internal link to the homepage or the blog index becomes plain text
     page = re.sub(r'<a [^>]*href="/(?:#[^"]*|blog/|blog/feed\.xml)?"[^>]*>(.*?)</a>', r'\1', page, flags=re.S)
     return page
