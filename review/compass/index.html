@@ -105,18 +105,18 @@ relations = [(&#x27;near&#x27;, &#x27;red_mouse&#x27;, &#x27;black_mouse_pad&#x2
 </div>
 
 <p>On RoboDojo ICL, the current run records a task-mean progress score of <strong>17.69</strong> for COMPASS and <strong>15.90</strong> for pi0.5, with <strong>79 versus 65</strong> successful cases.</p>
-<p>Switching only the encoder off gives the most direct comparison. On 250 paired LIBERO-CF cases that reuse the same saved Sol plans, COMPASS succeeds in <strong>126</strong>; without encoder injection it succeeds in <strong>36</strong>. Without the encoder, the robot finished a different, familiar task in 143 episodes, against 20 with it.</p>
+<p>Switching only the encoder off gives the most direct comparison. On 250 paired LIBERO-CF cases that reuse the same saved Sol plans, COMPASS succeeds in <strong>126</strong>; without encoder injection it succeeds in <strong>36</strong>. Without the encoder, the robot finished a different, familiar task in 143 episodes, against 20 with it. Fine-tuning pi0.5 itself with LoRA on the encoder's training data, with the target given as text, reaches <strong>12</strong>.</p>
 <div class="results-table">
 <table>
-<thead><tr><th>LIBERO-CF suite</th><th>Cases</th><th>COMPASS</th><th>Without encoder injection</th></tr></thead>
+<thead><tr><th>LIBERO-CF suite</th><th>Cases</th><th>COMPASS</th><th>Without encoder injection</th><th>Same-data LoRA fine-tuning</th></tr></thead>
 <tbody>
-<tr><td>Spatial</td><td>75</td><td>38 (50.7%)</td><td>17 (22.7%)</td></tr>
-<tr><td>Object</td><td>50</td><td>18 (36.0%)</td><td>2 (4.0%)</td></tr>
-<tr><td>OOD</td><td>75</td><td>42 (56.0%)</td><td>5 (6.7%)</td></tr>
-<tr><td>Long</td><td>50</td><td>28 (56.0%)</td><td>12 (24.0%)</td></tr>
-<tr><td>All</td><td>250</td><td>126 (50.4%)</td><td>36 (14.4%)</td></tr>
+<tr><td>Spatial</td><td>75</td><td>38 (50.7%)</td><td>17 (22.7%)</td><td>2 (2.7%)</td></tr>
+<tr><td>Object</td><td>50</td><td>18 (36.0%)</td><td>2 (4.0%)</td><td>2 (4.0%)</td></tr>
+<tr><td>OOD</td><td>75</td><td>42 (56.0%)</td><td>5 (6.7%)</td><td>3 (4.0%)</td></tr>
+<tr><td>Long</td><td>50</td><td>28 (56.0%)</td><td>12 (24.0%)</td><td>5 (10.0%)</td></tr>
+<tr><td>All</td><td>250</td><td>126 (50.4%)</td><td>36 (14.4%)</td><td>12 (4.8%)</td></tr>
 </tbody></table>
-<p class="result-foot">Successes on the same cases, plans, seeds and controller; only the encoder injection differs.</p>
+<p class="result-foot">Successes on the same cases, plans, seeds and controller; the first two columns differ only in encoder injection.</p>
 </div>
 
 <h2 id="what-scenecode-makes-possible">What SceneCode makes possible</h2>
