@@ -6,10 +6,10 @@
 :root{--fg:#1d1d1f;--mut:#666;--line:#e3e3e8;--bg:#fafafa;--acc:#2456c9;--warn:#b45309}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:15.5px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif}
-main{max-width:920px;margin:0 auto;padding:40px 20px 80px}
+main{max-width:940px;margin:0 auto;padding:40px 20px 80px}
 h1{font-size:26px;line-height:1.35;margin:0 0 6px}
-.sub{color:var(--mut);margin:0 0 24px}
-nav.toc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin-bottom:28px}
+.sub{color:var(--mut);margin:0 0 18px}
+nav.toc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 18px;margin-bottom:22px}
 nav.toc a{color:var(--acc);text-decoration:none;margin-right:18px;white-space:nowrap}
 h2{font-size:21px;margin:44px 0 6px;padding-top:8px;border-top:2px solid var(--fg)}
 .meta{color:var(--mut);font-size:14px;margin-bottom:14px}
@@ -22,57 +22,73 @@ blockquote{margin:4px 0;padding:6px 14px;border-left:3px solid #c9ced8;color:#3b
 .resp p{margin:6px 0}
 .exp{margin:4px 0 0 0;padding-left:22px}
 .exp li{margin:3px 0}
-.tbd{background:#fff3c4;color:var(--warn);padding:0 4px;border-radius:3px;font-weight:600;white-space:nowrap}
+.tbd{background:#fff3c4;color:var(--warn);padding:0 4px;border-radius:3px;font-weight:600}
 .note{font-size:13.5px;color:var(--mut)}
+.tip{background:#eef4ff;border:1px solid #c9d8f5;border-radius:10px;padding:10px 16px;font-size:14px;margin:0 0 22px}
+.tip p{margin:4px 0}
+.risk{background:#fff6f0;border:1px solid #f3cfb4;border-radius:10px;padding:10px 16px;margin:12px 0}
 table{border-collapse:collapse;width:100%;background:#fff;font-size:14.5px;margin-top:10px}
 th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
 th{background:#f1f2f5}
 .scores{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
 .scores span{background:#fff;border:1px solid var(--line);border-radius:6px;padding:2px 10px;font-size:13.5px}
-</style></head>
+.exp-card{background:#fff;border:1px solid var(--line);border-left:4px solid #c27c2c;border-radius:10px;padding:14px 20px;margin:16px 0}
+.exp-card h3{font-size:16.5px;margin:0 0 6px}
+.exp-card dl{margin:0;display:grid;grid-template-columns:92px 1fr;gap:4px 12px}
+.exp-card dt{font-weight:600;color:#6b4a1f}
+.exp-card dd{margin:0}
+.exp-card ul{margin:0;padding-left:20px}
+.ref{font-size:13px;color:var(--mut)}
+code{background:#f1f2f5;padding:0 4px;border-radius:3px;font-size:13.5px}
+</style>
+<script>window.hypothesisConfig=function(){return {openSidebar:false,showHighlights:"always"};};</script>
+<script src="https://hypothes.is/embed.js" async></script>
+</head>
 <body><main>
 <h1>RoboRSI（ICLR 2027 投稿 #14838）<br>审稿意见、建议回复与需要补充的实验</h1>
-<p class="sub">整理日期 2026-11-06。回复草稿为英文，可直接用于 OpenReview；<span class="tbd">[待填]</span> 是补完实验后才能填的数字，未填之前不要提交。</p>
+<p class="sub">更新于 2026-11-06。依据 arXiv 2610.12424v1 正文和附录整理。回复草稿为英文，可直接用于 OpenReview；<span class="tbd">[待填]</span> 是补完实验或核对后才能填的内容，未填之前不要提交。</p>
 
-<nav class="toc"><a href="#mgzr">审稿人 mGzr（2 分）</a><a href="#zq42">审稿人 zq42（3 分）</a><a href="#exps">需要补充的实验汇总</a></nav>
+<div class="tip">
+<p><b>怎么批注：</b>选中任意文字，点弹出的 <b>Annotate</b>（批注）或 <b>Highlight</b>（高亮）；右侧边栏可以查看所有批注和回复。第一次使用要注册一个免费的 Hypothesis 账号。</p>
+<p><b>注意：</b>Hypothesis 的批注默认是<b>公开</b>的。建议先在 <a href="https://web.hypothes.is/" target="_blank" rel="noopener">hypothes.is</a> 建一个私有小组（Groups → Create new group），把邀请链接发给老师和合作者，批注时在侧边栏左上角把发布范围从 Public 切换到这个小组。</p>
+</div>
+
+<nav class="toc"><a href="#mgzr">审稿人 mGzr（2 分）</a><a href="#zq42">审稿人 zq42（3 分）</a><a href="#baselines">ASPIRE / ENPIRE / EmbodiSkill 怎么接</a><a href="#exps">需要补充的实验（E1–E11）</a><a href="#map">意见与实验对照</a></nav>
+
+<p class="note">编号说明：审稿人说的“Table 4”（TSR 与 flat revision 对比）是投稿版的编号，在 arXiv 版中是 Table 5（§4.5.2）。下文按审稿人的说法引用。</p>
 
 <!-- ====================== mGzr ====================== -->
 <h2 id="mgzr">审稿人 mGzr</h2>
 <div class="meta">评分 2：弱拒绝 · 信心 3</div>
 <div class="scores"><span>表达 3：清晰易懂</span><span>信息量 2</span><span>可靠性 3：对可靠性没有实质性担忧</span></div>
-<p><b>认可的点：</b>动机清楚（只有把每次修复和任务结构绑定，执行经验才能复用）；TSR 方法简洁、有原则（找最早失败的技能、做最小修改、发布前先验证）；评测覆盖仿真基准和真机，消融有帮助。<br><b>主要顾虑：</b>认可动机和主体设计，顾虑集中在评测上。</p>
+<p><b>认可的点：</b>动机清楚（只有把每次修复和任务结构绑定，执行经验才能复用）；TSR 方法简洁、有原则（找最早失败的技能、做最小修改、发布前先验证）；评测覆盖仿真基准和真机，消融有帮助。<br><b>主要顾虑：</b>认可动机和主体设计，顾虑集中在评测上。是主要要争取提分的审稿人。</p>
 
 <div class="item" id="m1">
-<h3>W1 · 基线比较不公平</h3>
+<h3>W1 / Q1 · 基线比较不公平，要和其他自我改进系统比</h3>
 <span class="lab l1">审稿意见</span>
 <blockquote>Unfair baselines. RoboRSI keeps learning on the evaluated tasks, while the baselines do not. As a result, the evaluation shows the gain from self-improvement itself, but not RoboRSI's advantage over other RSI systems or approaches.<br>Q1: If possible, could the authors compare RoboRSI with related robotic RSI systems (e.g., ASPIRE, ENPIRE, or EmbodiSkill), or with a simple RSI variant built on one of the baselines?</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p>We thank the reviewer for this important point. We agree that the original comparison mainly measures the benefit of self-improvement over non-learning agents. To isolate RoboRSI's advantage over other self-improving designs, we added two comparisons under a matched learning budget (same number of learning episodes and the same LLM backbone):</p>
-<p>(1) <b>Self-improving baselines.</b> We built an RSI variant on top of the strongest baseline (OpenETA + reflection-based code repair with flat revision), and we additionally compared with <span class="tbd">[ASPIRE / ENPIRE / EmbodiSkill，按实际能跑通的写]</span>. RoboRSI outperforms the best of these by <span class="tbd">[X]</span> pp on average across the four benchmarks (new Table <span class="tbd">[X]</span>).</p>
-<p>(2) <b>Learn-then-freeze protocol.</b> We separated learning from evaluation: the skill library is frozen after learning on a training split and evaluated on held-out tasks / perturbed initial states. RoboRSI achieves <span class="tbd">[X]</span>% vs. <span class="tbd">[X]</span>% for the RSI baseline, showing that the gains transfer and are not due to continued learning on test tasks.</p>
+<p>We thank the reviewer for this important point and agree that the original comparison measures what self-improvement adds over fixed agents, not RoboRSI's advantage over other self-improving designs. We added three self-improving baselines, all with the same backbone (GPT-5.6-SOL), tool interface, per-episode interaction budget, task panels, and simulator verdict as in Table 1:</p>
+<p>(1) <b>ASPIRE</b> (Lu et al., 2026), the closest self-improving code agent, using its released code. Because ASPIRE learns each task with a parallel population search, we report it in two settings: its <i>native</i> protocol with a learning-token budget matched to RoboRSI's total learning cost on the same panel, and a <i>serial</i> adaptation in which each repaired program is released to the episodes that follow, the same stream RoboRSI uses.<br>(2) <b>OpenETA + flat revision</b>: OpenETA augmented with a reflect-and-repair loop that edits the skill code directly from the failure, without TSR attribution.<br>(3) <b>OpenETA + EmbodiSkill-style reflection</b>: skill-aware reflection (Ju et al., 2026) that distinguishes wrong skill content from execution lapses and updates the skill accordingly.</p>
+<p>On LIBERO-PRO, RoboRSI reaches <span class="tbd">[X]</span>% vs. <span class="tbd">[X]</span>% (ASPIRE-serial), <span class="tbd">[X]</span>% (ASPIRE-native, matched budget), <span class="tbd">[X]</span>% and <span class="tbd">[X]</span>% for the two OpenETA variants (new Table <span class="tbd">[X]</span>). We further separate learning from evaluation (learn-then-freeze, new Table <span class="tbd">[X]</span>): each method learns on a training split, its library is frozen, and it is evaluated on held-out tasks and on LIBERO-Plus. RoboRSI achieves <span class="tbd">[X]</span>% vs. <span class="tbd">[X]</span>% for the best self-improving baseline.</p>
+<p>ENPIRE (Xiao et al., 2026) improves neural policies and their training code through physical reinforcement learning on a robot fleet, rather than reusable code skills, so it does not admit a matched comparison in our protocol; we discuss this in Section 2 and note that RoboRSI's execution data can train such policies (Section 4.5.5).</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>在最强基线（OpenETA）上搭一个自我改进版本：失败后反思并修改代码，用 flat revision，学习预算和 LLM 与 RoboRSI 一致。</li>
-<li>尝试复现或接入 ASPIRE、ENPIRE、EmbodiSkill 中至少一个；跑不通的话在回复里说明原因。</li>
-<li>先学习后冻结：在训练任务上学习，冻结技能库，再在没见过的任务或换了初始状态的任务上测试；RoboRSI 和自我改进基线都按这个流程跑。</li>
-</ul>
+<p>见 <a href="#E1">E1 自我改进基线</a>、<a href="#E2">E2 先学习后冻结</a>。三个系统怎么接，见 <a href="#baselines">接入建议</a>。</p>
+<div class="risk"><b>要提前准备的风险：</b>ASPIRE 论文报告用 Claude Opus 5.5 在 LIBERO-Pro 的 80 个任务上平均成功率 99%，而 RoboRSI 在 LIBERO-PRO 上是 49.5%。审稿人或 AC 很可能拿这两个数字比。回复里必须说明设置不同：backbone 不同，任务数和扰动设置不同，ASPIRE 每个任务做种群搜索、只评测一个生成的程序。最有说服力的办法是 E1 在同一套设置下实测，不要只靠文字解释。</div>
 </div>
 
 <div class="item" id="m2">
-<h3>W2 · 对 TSR 的支撑不够</h3>
+<h3>W2 / Q3 · 对 TSR 的支撑不够（Table 4 只有 1 个任务、2 个种子）</h3>
 <span class="lab l1">审稿意见</span>
 <blockquote>Weak support for TSR. … a simpler alternative design, such as an RSI variant with flat revision, would help. Right now, the main test of TSR (Table 4) uses only one failed task and two seeds, which is not enough to support the paper's cool idea.<br>Q3: Could the authors repeat the TSR vs. flat revision comparison (Table 4) on more failed tasks?</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p>We agree that one task and two seeds are insufficient. We extended the TSR vs. flat revision comparison to <span class="tbd">[N]</span> failed tasks drawn from all four benchmarks, with <span class="tbd">[K]</span> seeds each. TSR improves the post-revision success rate from <span class="tbd">[X]</span>% to <span class="tbd">[X]</span>%, reduces the number of revision rounds from <span class="tbd">[X]</span> to <span class="tbd">[X]</span>, and lowers the regression rate on previously passing tasks from <span class="tbd">[X]</span>% to <span class="tbd">[X]</span>% (new Table <span class="tbd">[X]</span>). The full component-wise ablation is reported in our response to Reviewer zq42 (W1).</p>
+<p>We agree that one task and two seeds are insufficient. We now provide two levels of evidence. <b>(i) Revision-level:</b> we repeated the TSR vs. flat revision comparison on <span class="tbd">[N≥20]</span> failed tasks sampled from the LIBERO-PRO and RoboTwin failure records, stratified by failure category, with the same starting code, traces, agents, and release gate. Each released candidate is additionally evaluated on <span class="tbd">[3]</span> held-out seeds not used for development. TSR releases <span class="tbd">[X/N]</span> candidates vs. <span class="tbd">[X/N]</span> for flat revision, with held-out success <span class="tbd">[X]</span>% vs. <span class="tbd">[X]</span>%, <span class="tbd">[X]</span> vs. <span class="tbd">[X]</span> changed lines, and a regression rate of <span class="tbd">[X]</span>% vs. <span class="tbd">[X]</span>% on previously passing tasks. <b>(ii) System-level:</b> a full online run with flat revision in place of TSR on LIBERO-PRO and RoboTwin (variant (c) in our response to zq42) reaches <span class="tbd">[X]</span>% vs. <span class="tbd">[X]</span>% for full RoboRSI.</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>把 Table 4 扩展到更多失败任务（建议每个基准选几个，总数不少于 10），每个任务多跑几个种子。</li>
-<li>指标：修改后成功率、修改轮数、每次改动的范围（改了几个技能、多少行）、对之前通过任务的回归率。</li>
-</ul>
+<p>见 <a href="#E3">E3 扩展的 TSR 与 flat revision 对比</a>、<a href="#E4">E4 组件消融</a>。</p>
 </div>
 
 <div class="item" id="m3">
@@ -81,44 +97,35 @@ th{background:#f1f2f5}
 <blockquote>Because more than 2/3 failures of baselines are due to the agent declares a task done without checking the result. What happens if a simple confirmation step from a fresh observation is added to a baseline such as OpenETA? This would show how much RoboRSI gains beyond this simple fix.</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p>This is a good control. We added a fresh-observation confirmation step to OpenETA <span class="tbd">[以及其他基线]</span>: before declaring completion, the agent re-observes the scene and verifies the goal condition, and retries if verification fails. This improves OpenETA from <span class="tbd">[X]</span>% to <span class="tbd">[X]</span>%, while RoboRSI reaches <span class="tbd">[X]</span>%. The remaining gap of <span class="tbd">[X]</span> pp comes from failures that a confirmation step cannot fix, such as <span class="tbd">[按失败分析填写，如 grasp pose 错误、技能缺失]</span>, which RoboRSI repairs through skill revision.</p>
+<p>This is a good control. We added a fresh-observation confirmation step to OpenETA and CaP-X <span class="tbd">[以及 Maestro]</span>: before declaring completion, the agent re-observes the scene from all available views and checks the goal condition with the same backbone; if the check fails, it continues within the same interaction budget. On LIBERO-PRO, this raises OpenETA from 38.5% to <span class="tbd">[X]</span>% and reduces its premature-completion share from 66% to <span class="tbd">[X]</span>%; on LIBERO-Plus, from 36.4% to <span class="tbd">[X]</span>%. RoboRSI remains <span class="tbd">[X]</span> pp higher on LIBERO-PRO. The remaining gap comes from <span class="tbd">[按失败分类填写：如抓取或放置失败后的恢复、技能缺失、budget 耗尽]</span>. In addition, RoboRSI with self-improvement disabled (verification and recovery only) reaches <span class="tbd">[X]</span>%, which shows how much of the gap is due to the learned skill revisions rather than verification.</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>OpenETA（最好所有基线）加上“结束前重新观察、检查目标条件、不满足就重试”，在四个基准上重跑。</li>
-<li>对剩余的失败做分类，说明 RoboRSI 多出来的收益来自哪类失败。</li>
-</ul>
+<p>见 <a href="#E5">E5 基线加重新观察确认</a>；和 <a href="#E4">E4</a> 中的变体 (b) 合起来看。</p>
 </div>
 
 <div class="item" id="m4">
-<h3>W3 · 真机结果是挑出来的</h3>
+<h3>W3 / Q4 · 真机结果是挑出来的，要完整记录</h3>
 <span class="lab l1">审稿意见</span>
 <blockquote>Hand-picked real-robot results. The ten runs in Figure 4 were chosen after the fact. The paper also does not report an overall success rate or explain when a run stops.<br>Q4: What is the full trace across all 104 real-robot runs? Which key revisions actually drove the improvement (with skill contents as the demonstrations)?</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p>We will report the complete trace of all 104 real-robot runs in the revision (new Figure/Table <span class="tbd">[X]</span>): per-run success/failure, the overall success rate (<span class="tbd">[X]</span>% over all runs; <span class="tbd">[X]</span>% in the first 20 vs. <span class="tbd">[X]</span>% in the last 20 runs), and the number of skills in the library over time. A run terminates when <span class="tbd">[写清停止条件：如所有目标物体归位 / 超过 N 步 / 人工中止]</span>. The ten runs in Figure 4 were selected to <span class="tbd">[说明选取原因]</span>; we now replace them with <span class="tbd">[全部展示 / 按固定间隔抽样]</span>. We also list the <span class="tbd">[K]</span> key revisions that account for most of the improvement, with before/after skill code, in Appendix <span class="tbd">[X]</span>.</p>
+<p>We agree and will report the complete development record instead of the ten retrospectively selected runs (Appendix B already states that the selection was made after inspection). The new Figure/Table <span class="tbd">[X]</span> lists all 104 runs: manifest size, confirmed placements, task outcome, termination reason, skill-library version, and the revisions released before the run. Over all runs, <span class="tbd">[X]</span>% of manifest objects were placed and <span class="tbd">[X]</span>% of runs completed their full manifest; the rates are <span class="tbd">[X]</span>% in the first 20 and <span class="tbd">[X]</span>% in the last 20 runs. A run terminates when <span class="tbd">[写清停止条件：如完成清单并回到 dock / 达到交互或时间上限 / 安全原因人工中止]</span>.</p>
+<p>Because the 104 runs trace an evolving system, we also ran a <b>frozen-library physical evaluation</b>: the final skill version on <span class="tbd">[N]</span> new randomized manifests without any revision, giving a success rate of <span class="tbd">[X]</span>%. Finally, Appendix <span class="tbd">[X]</span> lists the <span class="tbd">[K]</span> revisions that account for most of the improvement (selected by the change in placement rate before and after release), with before/after skill code, extending the Round 25 and 33 examples in Appendix D.4.</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>不需要新跑，从现有日志整理：104 轮每轮的成败、整体成功率、成功率随轮次的曲线、技能数量随轮次的变化。</li>
-<li>写清每轮的停止条件。</li>
-<li>找出带来主要提升的几次关键修改，附修改前后的技能代码和修改原因。</li>
-</ul>
+<p>见 <a href="#E8">E8 104 轮真机完整记录和冻结后的真机评测</a>。</p>
 </div>
 
 <div class="item" id="m5">
-<h3>W4 · 缺少学习成本</h3>
+<h3>W4 / Q5 · 缺少学习成本</h3>
 <span class="lab l1">审稿意见</span>
 <blockquote>Missing learning cost. The paper reports the cost of running tasks, but not the cost of finding and fixing errors (diagnosis, review, and validation). Without this, the total cost cannot be compared with the baselines.<br>Q5: What is the total token and time cost of diagnosis, review, and validation, either on the simulation benchmarks OR over the 104 real-robot runs?</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p>We now report the full learning cost (new Table <span class="tbd">[X]</span>). On <span class="tbd">[仿真基准 / 104 轮真机]</span>, diagnosis, review, and validation consume <span class="tbd">[X]</span>, <span class="tbd">[X]</span>, and <span class="tbd">[X]</span> tokens and <span class="tbd">[X]</span>, <span class="tbd">[X]</span>, <span class="tbd">[X]</span> hours respectively, i.e., <span class="tbd">[X]</span>% of the total. Including learning cost, RoboRSI's total cost is <span class="tbd">[X]</span> vs. <span class="tbd">[X]</span> for the RSI baseline; since revisions are reused, the amortized learning cost per task decreases from <span class="tbd">[X]</span> to <span class="tbd">[X]</span> as more tasks are completed.</p>
+<p>We now report the full learning cost (new Table <span class="tbd">[X]</span>), measured from the logs of the runs in Table 1 and of the 104 physical runs. On LIBERO-PRO, diagnosis (Reviewer), review (Manager), and validation (harness and replay runs) consume <span class="tbd">[X]</span>, <span class="tbd">[X]</span>, and <span class="tbd">[X]</span> tokens and <span class="tbd">[X]</span>, <span class="tbd">[X]</span>, <span class="tbd">[X]</span> hours, i.e., <span class="tbd">[X]</span>% of the total; one released revision costs <span class="tbd">[X]</span> tokens on average. Including learning, RoboRSI's total cost is <span class="tbd">[X]</span> vs. <span class="tbd">[X]</span> for the self-improving baselines at matched budget (see our answer to Q1). Because released revisions and compound skills are reused, the learning cost amortized per episode falls from <span class="tbd">[X]</span> to <span class="tbd">[X]</span> over the run, and compound skills reduce execution tokens by 29.4% (Section 4.5.3).</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>从日志里按角色（诊断、审核、验证、执行）统计 token 数和耗时，仿真和真机至少做一个，最好都做。</li>
-<li>和自我改进基线比较“执行成本 + 学习成本”的总量；画学习成本平摊到每个任务后随任务数下降的曲线。</li>
-</ul>
+<p>见 <a href="#E7">E7 学习成本</a>。</p>
 </div>
 
 <div class="item" id="m6">
@@ -127,14 +134,11 @@ th{background:#f1f2f5}
 <blockquote>The Reviewer component (in Multi-agent System) works as an LLM-as-a-judge. How accurate are its judgments, for example its pass/fail calls and its choice of the earliest failing skill, compared with simulator labels or human labels? Under what conditions a human should be involved?</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p>We evaluated the Reviewer against ground truth. For pass/fail decisions, compared with simulator success labels on <span class="tbd">[N]</span> episodes, the Reviewer achieves <span class="tbd">[X]</span>% accuracy (precision <span class="tbd">[X]</span>, recall <span class="tbd">[X]</span>). For earliest-failing-skill localization, compared with human annotations on <span class="tbd">[N]</span> failed episodes, it is correct in <span class="tbd">[X]</span>% of cases. Most errors occur when <span class="tbd">[按错误分析填写，如遮挡、视觉相近的物体]</span>. Human involvement is needed when <span class="tbd">[如 Reviewer 置信度低 / 同一分支连续修改 N 次仍失败 / 涉及安全的技能]</span>; in our real-robot runs, humans intervened <span class="tbd">[X]</span> times over 104 runs.</p>
+<p>We evaluated the Reviewer against ground truth. For pass/fail decisions on atomic tasks, compared with simulator labels on <span class="tbd">[N]</span> episodes, it achieves <span class="tbd">[X]</span>% accuracy (precision <span class="tbd">[X]</span>, recall <span class="tbd">[X]</span>); false passes, the costly error, occur in <span class="tbd">[X]</span>% of cases. For the earliest failing node, two annotators labeled <span class="tbd">[N]</span> failed episodes from the tool traces and observations (Cohen's κ = <span class="tbd">[X]</span>); the Reviewer matches the consensus label in <span class="tbd">[X]</span>% of cases, and in <span class="tbd">[X]</span>% of the remaining cases it selects a node on the correct branch. Errors concentrate in <span class="tbd">[按错误分析填写，如遮挡、相似物体、上游感知错误]</span>.</p>
+<p>Because every revision must pass functional tests and replay without regression before release, a wrong attribution usually yields a rejected candidate rather than a harmful release: <span class="tbd">[X]</span>% of misattributed revisions were rejected by the gate. Humans are involved when <span class="tbd">[如：同一节点连续 K 个候选被拒绝；修改需要改接口；涉及安全或物理常识，见 Appendix D.5]</span>; over the 104 physical runs this happened <span class="tbd">[X]</span> times.</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>通过/失败判断：和仿真器的成功标签对比，报告准确率、精确率、召回率。</li>
-<li>最早失败技能的定位：抽一批失败样本做人工标注，报告定位准确率。</li>
-<li>对判错的样本做分类；从真机日志统计人工介入次数和原因，据此写出需要人介入的条件。</li>
-</ul>
+<p>见 <a href="#E9">E9 Reviewer 准确率和人工介入</a>。</p>
 </div>
 
 <!-- ====================== zq42 ====================== -->
@@ -144,26 +148,24 @@ th{background:#f1f2f5}
 <p><b>认可的点：</b>结构清晰，针对长期自主执行的实际问题；四个仿真基准都优于基线，LIBERO-PRO 上提高 11.0 个百分点；104 轮真机实验说明有实际部署潜力。</p>
 
 <div class="item" id="z1">
-<h3>W1 · 分不清提升来自 TSR 还是其他机制</h3>
+<h3>W1 / Q1 · 分不清提升来自 TSR 还是其他机制</h3>
 <span class="lab l1">审稿意见</span>
 <blockquote>由于 RoboRSI 同时引入了后条件验证、故障恢复、多智能体协作和在线技能更新，因此很难确定性能提升是源于 TSR 还是源于这些其他机制。<br>问题：能否纳入更严谨的消融研究，以清晰地证明 TSR 的独立贡献？具体而言，请将完整的 RoboRSI 系统与仅保留后条件验证和恢复机制的版本，以及采用 Flat Revision 进行在线技能更新的版本进行比较。</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p>We thank the reviewer for the concrete suggestion and ran exactly this ablation on all four benchmarks (new Table <span class="tbd">[X]</span>):</p>
+<p>We thank the reviewer for the concrete suggestion and ran exactly this ablation on LIBERO-PRO (600 episodes) and RoboTwin (150 episodes) under the protocol of Table 1 (new Table <span class="tbd">[X]</span>):</p>
 <table>
-<tr><th>Variant</th><th>Post-condition check + recovery</th><th>Online skill update</th><th>Revision</th><th>Success (%)</th></tr>
-<tr><td>(a) Full RoboRSI</td><td>✓</td><td>✓</td><td>TSR</td><td><span class="tbd">[X]</span></td></tr>
-<tr><td>(b) Check + recovery only</td><td>✓</td><td>✗</td><td>—</td><td><span class="tbd">[X]</span></td></tr>
-<tr><td>(c) Flat revision</td><td>✓</td><td>✓</td><td>Flat</td><td><span class="tbd">[X]</span></td></tr>
-<tr><td>(d) Single agent <span class="note">(可选)</span></td><td>✓</td><td>✓</td><td>TSR</td><td><span class="tbd">[X]</span></td></tr>
+<tr><th>Variant</th><th>Postcondition check + recovery</th><th>Online skill update</th><th>Revision</th><th>Roles</th><th>LIBERO-PRO</th><th>RoboTwin</th></tr>
+<tr><td>OpenETA</td><td>✗</td><td>✗</td><td>—</td><td>single</td><td>38.5</td><td>21.3</td></tr>
+<tr><td>(b) Check + recovery only</td><td>✓</td><td>✗</td><td>—</td><td>multi</td><td><span class="tbd">[X]</span></td><td><span class="tbd">[X]</span></td></tr>
+<tr><td>(c) Flat revision</td><td>✓</td><td>✓</td><td>Flat</td><td>multi</td><td><span class="tbd">[X]</span></td><td><span class="tbd">[X]</span></td></tr>
+<tr><td>(d) Single agent</td><td>✓</td><td>✓</td><td>TSR</td><td>single</td><td><span class="tbd">[X]</span></td><td><span class="tbd">[X]</span></td></tr>
+<tr><td>(a) Full RoboRSI</td><td>✓</td><td>✓</td><td>TSR</td><td>multi</td><td>49.5</td><td>24.0</td></tr>
 </table>
-<p>Post-condition checking and recovery account for <span class="tbd">[X]</span> pp of the gain over the baseline ((b) vs. baseline). Online skill updates add a further <span class="tbd">[X]</span> pp with flat revision ((c) vs. (b)), and TSR adds another <span class="tbd">[X]</span> pp on top of flat revision ((a) vs. (c)), while also reducing regressions from <span class="tbd">[X]</span>% to <span class="tbd">[X]</span>%. This isolates the independent contribution of TSR.</p>
+<p>Postcondition checking and recovery account for <span class="tbd">[X]</span> pp ((b) vs. OpenETA); online updates with flat revision add <span class="tbd">[X]</span> pp ((c) vs. (b)); TSR adds a further <span class="tbd">[X]</span> pp ((a) vs. (c)) while reducing the regression rate from <span class="tbd">[X]</span>% to <span class="tbd">[X]</span>% and the number of rejected candidates from <span class="tbd">[X]</span> to <span class="tbd">[X]</span>. We report paired differences with McNemar tests over matched (task, seed) episodes. Together with the revision-level comparison on <span class="tbd">[N]</span> failed tasks (our response to mGzr, W2), this isolates the independent contribution of TSR.</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>四个基准上跑 (a) 完整 RoboRSI、(b) 只保留后条件验证和恢复、(c) 在线更新但用 flat revision；时间够的话加 (d) 单智能体。</li>
-<li>除了成功率，也报告回归率和修改轮数。可以和 mGzr W2 的扩展实验一起做，共用 flat revision 的实现。</li>
-</ul>
+<p>见 <a href="#E4">E4 组件消融</a>、<a href="#E3">E3</a>。</p>
 </div>
 
 <div class="item" id="z2">
@@ -172,14 +174,10 @@ th{background:#f1f2f5}
 <blockquote>技能修复主要依赖于离线回放验证，缺乏技能库冻结后的重复测试和回归率分析。</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p>We added a frozen-library evaluation. After learning, we freeze the skill library and run each task <span class="tbd">[K]</span> times with different seeds / initial states. RoboRSI achieves <span class="tbd">[X]</span> ± <span class="tbd">[X]</span>% success, close to its online performance of <span class="tbd">[X]</span>%. We also measured regressions: after each released revision, we re-ran all previously passing tasks; <span class="tbd">[X]</span>% of revisions caused any regression, and the overall regression rate was <span class="tbd">[X]</span>% (vs. <span class="tbd">[X]</span>% for flat revision), because TSR confines changes to the failing branch and validates them before release.</p>
+<p>We added two analyses. <b>Frozen repeated testing:</b> after the online run, we froze the final LIBERO-PRO library and re-ran all 120 tasks with <span class="tbd">[5]</span> new initial states not seen during development. It achieves <span class="tbd">[X]</span> ± <span class="tbd">[X]</span>% success (mean ± std over seeds), compared with 49.5% online, and solves <span class="tbd">[X]</span>/120 tasks. The LIBERO-Plus results (Table 1) are a second frozen test: the LIBERO library receives no updates on 840 perturbed instances. <b>Regression:</b> for every released revision, we re-ran the previously successful (task, seed) pairs whose call graph reaches the revised branch. <span class="tbd">[X]</span>% of revisions caused any regression, affecting <span class="tbd">[X]</span>% of the re-run pairs, vs. <span class="tbd">[X]</span>% and <span class="tbd">[X]</span>% under flat revision. On the physical robot, where earlier tasks cannot be repeated cheaply, validation uses offline replay of the four most recent runs (Appendix D.4); the frozen-library physical evaluation in our response to mGzr (W3) complements it.</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>冻结技能库，每个任务换种子或初始状态重复跑多次，报告成功率的均值和方差，和在线学习时的成功率对比。</li>
-<li>每次发布修改后，重跑之前已通过的任务，统计回归率；和 flat revision 对比。</li>
-<li>冻结后的测试可以和 mGzr W1 的“先学习后冻结”一起做。</li>
-</ul>
+<p>见 <a href="#E6">E6 冻结后重复测试和回归率</a>、<a href="#E8">E8</a>。</p>
 </div>
 
 <div class="item" id="z3">
@@ -188,31 +186,181 @@ th{background:#f1f2f5}
 <blockquote>随着技能库的增长，应该如何管理版本控制、冲突和共享依赖关系？如何评估单个版本修订的影响范围？管理者的审核成本如何随技能库规模的变化而变化？</blockquote>
 <span class="lab l2">建议回复</span>
 <div class="resp">
-<p><b>Versioning and conflicts.</b> Each skill is versioned with its input/output contract. <span class="tbd">[按实际实现写：如修改不能改变已有接口，要改接口就新建技能；旧版本保留，可回滚；同一时间每个分支只允许一个修改]</span>.</p>
-<p><b>Impact scope.</b> Because every composite skill records its dependencies, the impact of a revision is the set of skills that depend on the revised one. We re-validate exactly this set before release. Across our runs, a revision affected on average <span class="tbd">[X]</span> dependent skills (max <span class="tbd">[X]</span>).</p>
-<p><b>Review cost vs. library size.</b> The Manager only reviews the revised branch and its dependents, not the whole library. As the library grew from <span class="tbd">[X]</span> to <span class="tbd">[X]</span> skills, per-revision review cost changed from <span class="tbd">[X]</span> to <span class="tbd">[X]</span> tokens (new Figure <span class="tbd">[X]</span>).</p>
+<p><b>Versioning and conflicts.</b> Each candidate is staged in an isolated copy of the library, and the Manager maintains skill versions (Section 3.3, Appendix A). A revision may change only nodes in its scope S<sub>t</sub>; if an interface must change, the scope is first expanded to its callers (Eq. 2). <span class="tbd">[按实际实现补充：并发修改同一节点时如何处理；旧版本是否保留、能否回滚]</span>.</p>
+<p><b>Impact scope.</b> The impact of a revision is the set of tasks whose call graph reaches S<sub>t</sub>, which is exactly the replay set H<sub>t</sub>. Across our runs, a revision reached on average <span class="tbd">[X]</span> skills and <span class="tbd">[X]</span> tasks (max <span class="tbd">[X]</span>).</p>
+<p><b>Review cost vs. library size.</b> The Manager reviews only the revised scope and its interfaces, not the whole library. As the library grew from <span class="tbd">[X]</span> to <span class="tbd">[X]</span> skills, the review tokens per revision changed from <span class="tbd">[X]</span> to <span class="tbd">[X]</span> (new Figure <span class="tbd">[X]</span>), while validation cost grows with |H<sub>t</sub>|.</p>
 </div>
 <span class="lab l3">需要补充的实验</span>
-<ul class="exp">
-<li>不需要新跑，从日志统计：技能库规模随时间的变化；每次修改影响到的依赖技能数量；每次修改的审核 token 和耗时随技能库规模的变化（画图）。</li>
-<li>写清版本管理、冲突处理和回滚机制；如果现在没有实现，回复里如实说明并列为后续工作。</li>
-</ul>
+<p>见 <a href="#E10">E10 技能库规模分析</a>。</p>
 </div>
 
-<!-- ====================== 汇总 ====================== -->
-<h2 id="exps">需要补充的实验汇总</h2>
-<p class="note">同一个实验能回答多条意见的已经合并。</p>
+<!-- ====================== 接入建议 ====================== -->
+<h2 id="baselines">ASPIRE、ENPIRE、EmbodiSkill 应该怎么接</h2>
+<p>三个系统都是审稿人点名的。结论：<b>ASPIRE 必须接</b>，作为主要的自我改进基线；<b>EmbodiSkill 接它的更新机制</b>，装到 OpenETA 上；<b>ENPIRE 不做完整对比</b>，只借用它的代码智能体循环，并在回复里说明原因。</p>
 <table>
-<tr><th>#</th><th>实验</th><th>回应</th><th>是否要新跑</th></tr>
-<tr><td>1</td><td>TSR 消融：(a) 完整 RoboRSI、(b) 只保留后条件验证和恢复、(c) flat revision 在线更新、(d) 单智能体（可选）；四个基准；报告成功率、回归率、修改轮数</td><td>zq42 W1；mGzr W2</td><td>是</td></tr>
-<tr><td>2</td><td>把 Table 4 的 TSR 与 flat revision 对比扩展到 10 个以上失败任务、多种子</td><td>mGzr W2 / Q3</td><td>是</td></tr>
-<tr><td>3</td><td>自我改进基线：OpenETA + 反思修代码（flat revision），学习预算相同；能跑通的话加 ASPIRE / ENPIRE / EmbodiSkill</td><td>mGzr W1 / Q1</td><td>是</td></tr>
-<tr><td>4</td><td>先学习后冻结：在训练任务上学习，冻结后在没见过的任务或新初始状态上测试，多次重复，报告均值和方差</td><td>mGzr W1；zq42 W2</td><td>是</td></tr>
-<tr><td>5</td><td>回归率：每次发布修改后重跑已通过的任务，和 flat revision 对比</td><td>zq42 W2；mGzr W2</td><td>是（可在 1、4 中顺带统计）</td></tr>
-<tr><td>6</td><td>基线加“重新观察确认”步骤（至少 OpenETA），四个基准重跑，并分析剩余失败的类型</td><td>mGzr Q2</td><td>是</td></tr>
-<tr><td>7</td><td>Reviewer 准确率：通过/失败对比仿真器标签；最早失败技能对比人工标注；错误分类；人工介入次数和条件</td><td>mGzr Q6</td><td>需要人工标注</td></tr>
-<tr><td>8</td><td>104 轮真机完整记录：每轮成败、整体成功率、成功率曲线、停止条件、Figure 4 的选取说明、关键修改及前后代码</td><td>mGzr W3 / Q4</td><td>否，整理日志</td></tr>
-<tr><td>9</td><td>学习成本：诊断、审核、验证、执行各自的 token 和耗时；和基线比较总成本；平摊后随任务数的变化</td><td>mGzr W4 / Q5</td><td>否，整理日志</td></tr>
-<tr><td>10</td><td>技能库规模分析：每次修改影响的依赖技能数、审核成本随技能库规模的变化；版本、冲突、回滚机制说明</td><td>zq42 Q2</td><td>否，整理日志并补充说明</td></tr>
+<tr><th style="width:13%">系统</th><th style="width:30%">它是什么</th><th style="width:30%">建议的接法</th><th>原因</th></tr>
+<tr><td><b>ASPIRE</b><br><span class="ref">Lu et al., 2026<br>arXiv 2607.00272<br>NVIDIA，代码已开源</span></td>
+<td>代码即策略。从执行轨迹诊断失败、写修复、验证，通过后放进不断增长的技能库；用种群搜索并行生成和调试多个候选程序。评测 LIBERO-PRO、Robosuite、BEHAVIOR-1K。</td>
+<td><b>主基线，跑两个设置：</b><br>① <b>原生协议</b>：用官方代码，换成 GPT-5.6-SOL 和 RoboRSI 相同的工具接口，在同样的 LIBERO-PRO 120 任务和 RoboTwin 50 任务上学习；学习阶段的总 token 预算和 RoboRSI 的学习成本（E7）对齐；学完后每个任务按 5 个初始状态评测。<br>② <b>串行改编</b>（ASPIRE-serial）：种群大小设为 1，按 RoboRSI 的任务顺序逐个 episode 跑，验证通过的修复立刻放进库里给后面的 episode 用。这是和 RoboRSI 同协议的对比。</td>
+<td>和 RoboRSI 最接近（代码技能 + 技能库 + LIBERO-PRO），代码开源，审稿人第一个点名。论文 §4.2 说它“不能在同一协议下运行”，审稿人不接受这个理由，所以要么跑通，要么给出具体跑不通的原因。两个设置都报：原生协议说明我们没有削弱它；串行改编说明同协议下 TSR 的优势。</td></tr>
+<tr><td><b>EmbodiSkill</b><br><span class="ref">Ju et al., 2026<br>arXiv 2605.10332</span></td>
+<td>无需训练的技能感知反思：把每条轨迹和当时用的技能对应起来，区分“技能内容错了”和“技能对、但执行时没照做”；前者改技能内容，后者保留技能、加强提示。评测 ALFWorld、EmbodiedBench，没有机器人操作实验。</td>
+<td><b>装到 OpenETA 上</b>（OpenETA + EmbodiSkill 反思）：OpenETA 照常执行；每个 episode 结束后，用 EmbodiSkill 的规则判断失败类型，更新 OpenETA 的技能代码或技能说明，供后续 episode 使用。同 backbone、同任务顺序、同预算。</td>
+<td>它本身不在机器人基准上，直接跑原版没有意义；但它的更新机制是“技能级诊断”，和 TSR 的“最早失败节点”正好形成对照。装到 OpenETA 上，同时满足审稿人要的“在某个基线上搭一个简单的自我改进版本”。</td></tr>
+<tr><td><b>ENPIRE</b><br><span class="ref">Xiao et al., CoRL 2026<br>arXiv 2606.19980<br>NVIDIA，代码已开源</span></td>
+<td>让编程智能体在真实机器人上闭环改进<b>神经网络策略</b>（自动复位、训练、多机评测、读日志改训练和算法代码），在双臂 YAM 机器人上做到 99% 成功率。也支持代码即策略模式下的 Python 技能脚本。</td>
+<td><b>不做完整对比，只借用一部分：</b><br>① 用它代码即策略模式下的“读日志、改代码”循环，作为 flat revision 的一个现成实现（E3、E4 的变体 (c)），避免审稿人质疑我们自己写的 flat revision 太弱；<br>② 回复里说明：ENPIRE 改进的是神经策略和训练代码，需要真机强化学习和机器人集群，不是可复用的代码技能，没法在同一协议下比较；RoboRSI 的执行数据也可以训练策略（§4.5.5），两者可以互补。</td>
+<td>完整复现需要它的真机硬件和多机设置，成本高，比较对象也不一致（学策略 vs 学技能）。只借用它的代码智能体循环，既回应了审稿人点名，又不会被说成“挑软柿子”。</td></tr>
+<tr><td><b>都要做</b></td>
+<td colspan="3">在论文 §2 和 §4.2 加一张对比表：学习对象（代码技能 / 技能说明 / 神经策略）、更新粒度（任务级 / 技能级 / 最早失败节点）、是否发布前验证、是否检查回归、学习方式（并行搜索 / 串行）、评测基准。</td></tr>
 </table>
+
+<!-- ====================== 实验 ====================== -->
+<h2 id="exps">需要补充的实验（E1–E11）</h2>
+<p class="note">统一设置：除非另说明，都用 GPT-5.6-SOL、相同工具接口、相同每个 episode 的交互预算、相同任务面板和仿真器判定，与 Table 1 一致。成对比较都报告 McNemar 检验或 bootstrap 95% 置信区间。episode 数按 Table 1 的面板估算，实际以运行为准。</p>
+
+<div class="exp-card" id="E1">
+<h3>E1 · 自我改进基线对比</h3>
+<dl>
+<dt>回应</dt><dd>mGzr W1 / Q1</dd>
+<dt>目的</dt><dd>说明 RoboRSI 比其他自我改进方法好，而不只是比不会学习的基线好。</dd>
+<dt>方法</dt><dd><ul>
+<li>ASPIRE-native：官方代码，学习 token 总预算和 RoboRSI 在同面板上的学习成本对齐（取自 E7）。</li>
+<li>ASPIRE-serial：种群大小 1，串行，验证通过即发布。</li>
+<li>OpenETA + flat revision：失败后直接根据失败改技能代码，可以复用 ENPIRE 代码即策略模式的循环。</li>
+<li>OpenETA + EmbodiSkill 反思。</li>
+<li>对照：RoboRSI（已有）、OpenETA（已有）。</li></ul></dd>
+<dt>面板</dt><dd>LIBERO-PRO 120 任务 × 5 初始状态 = 600 episodes / 方法；RoboTwin 50 任务 × 3 = 150 episodes / 方法。所有串行方法用同一任务顺序。时间紧的话先做 LIBERO-PRO。</dd>
+<dt>指标</dt><dd>成功率、覆盖率（至少成功一次的任务数）、发布的修改数、学习 token 和时间、执行 token。</dd>
+<dt>注意</dt><dd>ASPIRE 在 LIBERO-Pro 上报告过 99%（Claude Opus 5.5、80 个任务），回复里要写清设置差异；先在小面板上复现 ASPIRE 自己的设置，确认接入没有出错，再跑统一设置。</dd>
+</dl></div>
+
+<div class="exp-card" id="E2">
+<h3>E2 · 先学习后冻结（学到的东西能不能迁移）</h3>
+<dl>
+<dt>回应</dt><dd>mGzr W1；zq42 W2</dd>
+<dt>目的</dt><dd>把学习和评测分开，排除“在测试任务上继续学所以分高”的质疑。</dd>
+<dt>方法</dt><dd><ul>
+<li>设置 A（按任务划分）：LIBERO-PRO 120 任务按 suite 分层随机分成 60 个训练任务、60 个测试任务；所有自我改进方法在训练任务上学习，冻结后在测试任务上评测，测试任务每个 5 个初始状态。</li>
+<li>设置 B（按扰动迁移）：沿用论文 LIBERO-Plus 的做法，各方法在 LIBERO 上学习、冻结后在 LIBERO-Plus 840 个扰动实例上评测；目前只有 RoboRSI 有这个结果，要补 E1 中的自我改进基线。</li></ul></dd>
+<dt>指标</dt><dd>测试集成功率、覆盖率，以及和不学习的基线（OpenETA 等）的差距。</dd>
+</dl></div>
+
+<div class="exp-card" id="E3">
+<h3>E3 · 扩展的 TSR 与 flat revision 对比（修改层面）</h3>
+<dl>
+<dt>回应</dt><dd>mGzr W2 / Q3；zq42 W1</dd>
+<dt>目的</dt><dd>把审稿人说的 Table 4（arXiv 版 Table 5，1 个任务、2 个种子）扩大到有统计意义的规模。</dd>
+<dt>方法</dt><dd><ul>
+<li>从 LIBERO-PRO 和 RoboTwin 的失败记录里抽至少 20 个失败任务，按失败类别（抓取、放置、运动、过早完成、预算耗尽）分层抽样；预先写好抽样规则，不要事后挑选。</li>
+<li>两个条件从相同代码、相同失败轨迹出发，用相同的 Planner、Engineer、Reviewer、Manager 和发布标准；唯一区别是 TSR 先建责任树、定位最早失败节点，flat 直接根据失败提出修改。</li>
+<li>每个条件每个任务生成 3 个独立候选（不同采样种子），统计稳定性。</li>
+<li>发布标准不变（2 个开发种子成功）；另外在 3 个没参与开发的初始状态上评测。</li></ul></dd>
+<dt>指标</dt><dd>发布率、未参与开发的初始状态上的成功率、改动的文件数和行数、改动范围是否落在失败分支内、对其他已通过任务的回归率、到发布为止的轮数和 token。</dd>
+</dl></div>
+
+<div class="exp-card" id="E4">
+<h3>E4 · 组件消融（系统层面）</h3>
+<dl>
+<dt>回应</dt><dd>zq42 W1 / Q1；mGzr W2 / Q2</dd>
+<dt>目的</dt><dd>分清提升分别来自验证和恢复、在线更新、TSR、多角色分工。</dd>
+<dt>方法</dt><dd><ul>
+<li>(a) 完整 RoboRSI：已有结果。</li>
+<li>(b) 只保留后条件验证和恢复：用初始技能库，关掉在线更新。</li>
+<li>(c) flat revision 在线更新：其余和 (a) 相同。</li>
+<li>(d) 单智能体：论文 §4.5.1 只报告了 RoboTwin 的覆盖率（9/50 vs 36/50），要补成功率，并补上 LIBERO-PRO。</li></ul></dd>
+<dt>面板</dt><dd>LIBERO-PRO 600 + RoboTwin 150 episodes / 变体，任务顺序和初始状态与 (a) 相同，便于成对检验。</dd>
+<dt>指标</dt><dd>成功率、覆盖率、回归率、被拒绝的候选数、学习 token。</dd>
+</dl></div>
+
+<div class="exp-card" id="E5">
+<h3>E5 · 基线加“重新观察确认”</h3>
+<dl>
+<dt>回应</dt><dd>mGzr Q2</dd>
+<dt>目的</dt><dd>说明 RoboRSI 的优势不只是“完成前多看一眼”。</dd>
+<dt>方法</dt><dd>给 OpenETA、CaP-X（可以的话加 Maestro）在宣布完成前加一步：从所有视角重新观察，用同一个 backbone 检查目标条件，不满足就继续，仍在原来的交互预算内。提示词写进附录。</dd>
+<dt>面板</dt><dd>LIBERO-PRO 600、LIBERO-Plus 840 episodes / 方法。</dd>
+<dt>指标</dt><dd>成功率、失败构成（过早完成的占比是否从约 66% 降下来）、执行失败后仍成功的比例（同 Figure 6c）、token 增加量。和 E4 的 (b) 对比。</dd>
+</dl></div>
+
+<div class="exp-card" id="E6">
+<h3>E6 · 冻结后重复测试和回归率</h3>
+<dl>
+<dt>回应</dt><dd>zq42 W2</dd>
+<dt>方法</dt><dd><ul>
+<li>冻结 LIBERO-PRO 在线运行结束时的技能库，用 5 个开发时没见过的新初始状态重跑 120 个任务（600 episodes），报告各种子成功率的均值和标准差，和在线 49.5% 对比。</li>
+<li>回归率：对每一个发布的修改，重跑之前成功过、并且调用到被修改分支的 (task, seed)；统计“至少造成一次回归的修改占比”和“回归的 episode 占比”。TSR 和 E4 (c) flat revision 各算一次。</li></ul></dd>
+<dt>指标</dt><dd>冻结后成功率（均值 ± 标准差）、覆盖率、回归率。</dd>
+</dl></div>
+
+<div class="exp-card" id="E7">
+<h3>E7 · 学习成本（主要整理日志）</h3>
+<dl>
+<dt>回应</dt><dd>mGzr W4 / Q5；也给 E1 提供对齐预算</dd>
+<dt>方法</dt><dd><ul>
+<li>从 Table 1 各次运行和 104 轮真机日志，按角色统计 token、模型调用次数、时间：执行（Planner + Engineer）、诊断（Reviewer）、审核（Manager）、验证（harness 和回放的仿真时间）。</li>
+<li>算出每个发布修改的平均成本、被拒绝候选的成本。</li>
+<li>画学习成本平摊到每个 episode 后随运行进度变化的曲线。</li>
+<li>和 E1 各自我改进基线比较“执行 + 学习”的总成本。</li></ul></dd>
+<dt>指标</dt><dd>token、调用次数、时间，按角色拆分；学习成本占总成本的比例。</dd>
+</dl></div>
+
+<div class="exp-card" id="E8">
+<h3>E8 · 104 轮真机完整记录，以及冻结后的真机评测</h3>
+<dl>
+<dt>回应</dt><dd>mGzr W3 / Q4；zq42 W2</dd>
+<dt>方法</dt><dd><ul>
+<li><b>整理日志（不用新跑）：</b>全部 104 轮，每轮的清单物体数、确认放好的物体数、是否完成、停止原因、技能库版本、这一轮之前发布了哪些修改；整体放置率、完成率，按 20 轮一段的变化曲线。替换 Figure 4 中事后挑选的 10 轮。</li>
+<li><b>关键修改：</b>按“修改发布前后若干轮的放置率变化”找出贡献最大的几个修改，附修改前后的技能代码，扩展附录 D.4 的第 25、33 轮。</li>
+<li><b>冻结后的真机评测（建议新跑）：</b>最终技能版本，不允许修改，在 10–20 个新的随机清单上运行，复位规则同附录 B，预先写好清单生成规则。报告完成率和放置率。这是回答“整体成功率”最直接的数据。</li>
+<li>写清停止条件：完成清单并回到 dock、达到时间或交互上限、安全原因人工中止。</li></ul></dd>
+<dt>指标</dt><dd>放置率、完成率、人工介入次数、每轮时长。</dd>
+</dl></div>
+
+<div class="exp-card" id="E9">
+<h3>E9 · Reviewer 准确率和人工介入</h3>
+<dl>
+<dt>回应</dt><dd>mGzr Q6</dd>
+<dt>方法</dt><dd><ul>
+<li><b>通过/失败判断：</b>在 LIBERO-PRO 和 LIBERO-Plus 的运行里，把 Reviewer 对每个原子任务的判断和仿真器标签对比（不需要人工，样本量可以很大）。</li>
+<li><b>最早失败节点：</b>按失败类别分层抽 200 个失败 episode，两名标注者根据工具轨迹和观测独立标注最早失败节点，计算一致性（Cohen's κ），分歧讨论后定标签；计算 Reviewer 的完全命中率和“落在正确分支上”的比例。</li>
+<li><b>错误的后果：</b>统计定位错误的修改中，有多少被发布门槛拦下。</li>
+<li><b>真机：</b>Reviewer 的判断和现场人员确认的结果对比；统计 104 轮中的人工介入次数和原因（附录 D.5 的分类），据此写出需要人介入的条件。</li></ul></dd>
+<dt>指标</dt><dd>准确率、精确率、召回率、误判通过率（最危险的错误）、节点定位准确率、κ、人工介入次数。</dd>
+</dl></div>
+
+<div class="exp-card" id="E10">
+<h3>E10 · 技能库规模分析（主要整理日志）</h3>
+<dl>
+<dt>回应</dt><dd>zq42 Q2</dd>
+<dt>方法</dt><dd><ul>
+<li>技能库节点数和复合技能数随运行进度的变化。</li>
+<li>每个发布的修改影响到的技能数和任务数（调用图能到达修改范围的任务，即回放集 H<sub>t</sub> 的大小）。</li>
+<li>Manager 每次审核的 token 和时间、验证时间随技能库规模的变化，画散点图并拟合趋势。</li>
+<li>写清版本管理、冲突和回滚机制；没实现的部分如实说明，列为后续工作。</li></ul></dd>
+</dl></div>
+
+<div class="exp-card" id="E11">
+<h3>E11 · 统计补强（不用新跑）</h3>
+<dl>
+<dt>回应</dt><dd>两位审稿人对可靠性的整体顾虑</dd>
+<dt>方法</dt><dd>Table 1 和 Table 2 每个差值补 bootstrap 95% 置信区间和成对检验（论文目前只有复合技能的消融有 McNemar 检验）；RoboTwin 上 RoboRSI 用的是 154 个 episode、基线是 150 个，改成按相同的 (task, seed) 对齐后再比，或说明对齐方式。</dd>
+</dl></div>
+
+<!-- ====================== 对照表 ====================== -->
+<h2 id="map">意见与实验对照</h2>
+<table>
+<tr><th>审稿意见</th><th>对应实验</th><th>是否要新跑</th></tr>
+<tr><td>mGzr W1 / Q1：基线不公平，和 ASPIRE、ENPIRE、EmbodiSkill 比</td><td>E1、E2，接入建议</td><td>是</td></tr>
+<tr><td>mGzr W2 / Q3：TSR 证据不够，扩展 Table 4</td><td>E3、E4</td><td>是</td></tr>
+<tr><td>mGzr Q2：基线加重新观察确认</td><td>E5，配合 E4 (b)</td><td>是</td></tr>
+<tr><td>mGzr W3 / Q4：真机结果挑选、完整记录、关键修改</td><td>E8</td><td>日志整理；冻结后的真机评测要新跑</td></tr>
+<tr><td>mGzr W4 / Q5：学习成本</td><td>E7</td><td>否，整理日志</td></tr>
+<tr><td>mGzr Q6：Reviewer 准确率、人工介入</td><td>E9</td><td>需要人工标注</td></tr>
+<tr><td>zq42 W1 / Q1：TSR 的独立贡献</td><td>E4、E3</td><td>是</td></tr>
+<tr><td>zq42 W2：冻结后重复测试、回归率</td><td>E6、E2、E8</td><td>是</td></tr>
+<tr><td>zq42 Q2：版本、冲突、依赖、审核成本</td><td>E10</td><td>否，整理日志并补充说明</td></tr>
+<tr><td>两位审稿人对可靠性的整体顾虑</td><td>E11</td><td>否，重新统计</td></tr>
+</table>
+<p class="ref">参考：<a href="https://arxiv.org/html/2610.12424v1">RoboRSI (arXiv 2610.12424)</a> · <a href="https://arxiv.org/abs/2607.00272">ASPIRE (arXiv 2607.00272)</a> · <a href="https://github.com/NVlabs/ASPIRE">NVlabs/ASPIRE</a> · <a href="https://arxiv.org/abs/2606.19980">ENPIRE (arXiv 2606.19980)</a> · <a href="https://github.com/NVlabs/ENPIRE">NVlabs/ENPIRE</a> · <a href="https://arxiv.org/abs/2605.10332">EmbodiSkill (arXiv 2605.10332)</a></p>
 </main></body></html>
